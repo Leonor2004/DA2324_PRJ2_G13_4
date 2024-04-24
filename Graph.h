@@ -47,7 +47,7 @@ public:
      *
      * @return Type
      */
-    int getType() const;
+    //int getType() const;
 
     /**
      * @brief Get vector with adjacent edges
@@ -142,7 +142,7 @@ public:
 
 protected:
     string info;                    // info node
-    int type;                       // 0->City; 1->Reservoir; 2->Station
+    //int type;                       // 0->City; 1->Reservoir; 2->Station
     std::vector<Edge *> adj;        // outgoing edges
     std::vector<Edge *> incoming;   // incoming edges
     int vectorPos;                  // position in the vector of its type (citiesVector, reservoirVector, stationsVector)

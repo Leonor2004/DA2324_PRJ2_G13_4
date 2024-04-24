@@ -2,15 +2,15 @@
 
 /************************* Vertex  **************************/
 
-Vertex::Vertex(string in, int t, int pos): info(in), type(t), vectorPos(pos) {}
+Vertex::Vertex(string in, int t, int pos): info(in)/*, type(t)*/, vectorPos(pos) {}
 
 string Vertex::getInfo() const {
     return this->info;
 }
 
-int Vertex::getType() const {
+/*int Vertex::getType() const {
     return type;
-}
+}*/
 
 std::vector<Edge*> Vertex::getAdj() const {
     return this->adj;
