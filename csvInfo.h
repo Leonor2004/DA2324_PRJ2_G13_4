@@ -19,6 +19,31 @@ public:
      */
     csvInfo();
 
+    /**
+     * @brief Graph
+     */
+    static Graph edgesGraph;
+
+    /**
+     * @brief Vertex Vector
+     */
+    static vector<Vertex> vertexVector;
+
+    /**
+     * Vertex Set
+     */
+    static std::set<std::string> vertexSet;
+
+    /**
+     * @brief Creation of the graph
+     *
+     * Complexity: O(n^2)
+     *
+     * @param graph : Graph the user chose
+     */
+    static void createGraph(string graph);
+
+
 };
 
 #endif //DA2324_PRJ2_G13_4_CSVINFO_H

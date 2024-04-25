@@ -2,7 +2,7 @@
 
 /************************* Vertex  **************************/
 
-Vertex::Vertex(string in, int t, int pos): info(in)/*, type(t)*/, vectorPos(pos) {}
+Vertex::Vertex(string in, int pos): info(in)/*, type(t)*/, vectorPos(pos) {}
 
 string Vertex::getInfo() const {
     return this->info;
@@ -143,10 +143,10 @@ Vertex* Graph::findVertex(const string &in) const {
     return nullptr;
 }
 
-bool Graph::addVertex(const string &in, int t, int pos) {
+bool Graph::addVertex(const string &in, int pos) {
     if (findVertex(in) != nullptr)
         return false;
-    vertexSet.push_back(new Vertex(in, t, pos));
+    vertexSet.push_back(new Vertex(in, pos));
     return true;
 }
 

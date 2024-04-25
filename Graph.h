@@ -26,10 +26,9 @@ public:
      * Complexity: O(1)
      *
      * @param in : Information associated with the vertex
-     * @param type : 0,1 or 2 if City, Reservoir or Station
      * @param pos : Position in the vector of its type (citiesVector, reservoirVector, stationsVector)
      */
-    Vertex(string in, int type, int pos);
+    Vertex(string in, int pos);
 
     /**
      * @brief Get info
@@ -297,7 +296,7 @@ public:
      *
      *  @return Returns true if successful, and false if a vertex with that content already exists.
      */
-    bool addVertex(const string &in, int t, int pos);
+    bool addVertex(const string &in, int pos);
 
     /**
      * @brief Remove vertex
