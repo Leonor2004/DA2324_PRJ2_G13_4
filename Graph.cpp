@@ -2,15 +2,12 @@
 
 /************************* Vertex  **************************/
 
-Vertex::Vertex(string in, int pos): info(in)/*, type(t)*/, vectorPos(pos) {}
+Vertex::Vertex(string in, int pos, double lon, double lat): info(in), vectorPos(pos), longitude(lon), latitude(lat) {}
 
 string Vertex::getInfo() const {
     return this->info;
 }
 
-/*int Vertex::getType() const {
-    return type;
-}*/
 
 std::vector<Edge*> Vertex::getAdj() const {
     return this->adj;
@@ -73,6 +70,15 @@ void Vertex::removeOutgoingEdges() {
         deleteEdge(edge);
     }
 }
+
+double Vertex::getLon() const {
+    return longitude;
+}
+
+double Vertex::getLat() const {
+    return latitude;
+}
+
 
 void Vertex::deleteEdge(Edge *edge) {
     Vertex *dest = edge->getDest();
@@ -143,10 +149,10 @@ Vertex* Graph::findVertex(const string &in) const {
     return nullptr;
 }
 
-bool Graph::addVertex(const string &in, int pos) {
+bool Graph::addVertex(const string &in, int pos, double lon, double lat) {
     if (findVertex(in) != nullptr)
         return false;
-    vertexSet.push_back(new Vertex(in, pos));
+    vertexSet.push_back(new Vertex(in, pos, lon, lat));
     return true;
 }
 

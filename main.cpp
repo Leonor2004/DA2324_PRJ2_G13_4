@@ -153,6 +153,18 @@ void datasetMenu(){
     cout << "1 - Toy-Graphs - shipping" << endl;
     cout << "2 - Toy-Graphs - stadiums" << endl;
     cout << "3 - Toy-Graphs - tourism" << endl;
+    cout << "4 - Fully Connected - 25 edges" << endl;
+    cout << "5 - Fully Connected - 50 edges" << endl;
+    cout << "6 - Fully Connected - 75 edges" << endl;
+    cout << "7 - Fully Connected - 100 edges" << endl;
+    cout << "8 - Fully Connected - 200 edges" << endl;
+    cout << "9 - Fully Connected - 300 edges" << endl;
+    cout << "10 - Fully Connected - 400 edges" << endl;
+    cout << "11 - Fully Connected - 500 edges" << endl;
+    cout << "12 - Fully Connected - 600 edges" << endl;
+    cout << "13 - Fully Connected - 700 edges" << endl;
+    cout << "14 - Fully Connected - 800 edges" << endl;
+    cout << "15 - Fully Connected - 900 edges" << endl;
     cout << "0 - Quit." << endl;
     cout << endl;
     cout << "Note: If you enter a 'q' when asked for an input," << endl;
@@ -174,6 +186,66 @@ void datasetMenu(){
                     return;
                 case 3 :
                     csvInfo::createGraph("c");
+                    menus.emplace("main");
+                    return;
+                case 4 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("25");
+                    menus.emplace("main");
+                    return;
+                case 5 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("50");
+                    menus.emplace("main");
+                    return;
+                case 6 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("75");
+                    menus.emplace("main");
+                    return;
+                case 7 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("100");
+                    menus.emplace("main");
+                    return;
+                case 8 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("200");
+                    menus.emplace("main");
+                    return;
+                case 9 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("300");
+                    menus.emplace("main");
+                    return;
+                case 10 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("400");
+                    menus.emplace("main");
+                    return;
+                case 11 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("500");
+                    menus.emplace("main");
+                    return;
+                case 12 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("600");
+                    menus.emplace("main");
+                    return;
+                case 13 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("700");
+                    menus.emplace("main");
+                    return;
+                case 14 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("800");
+                    menus.emplace("main");
+                    return;
+                case 15 :
+                    csvInfo::createNodes();
+                    csvInfo::createGraph("900");
                     menus.emplace("main");
                     return;
                 case 0:

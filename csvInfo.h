@@ -43,6 +43,7 @@ public:
      */
     static void createGraph(string graph);
 
+    static void createNodes();
 
 };
 

@@ -26,9 +26,11 @@ public:
      * Complexity: O(1)
      *
      * @param in : Information associated with the vertex
-     * @param pos : Position in the vector of its type (citiesVector, reservoirVector, stationsVector)
+     * @param pos : Position in the vector
+     * @param lon : Longitude
+     * @param lat : Latitude
      */
-    Vertex(string in, int pos);
+    Vertex(string in, int pos, double lon, double lat);
 
     /**
      * @brief Get info
@@ -38,15 +40,6 @@ public:
      * @return Info
      */
     string getInfo() const;
-
-    /**
-     * @brief Get type
-     *
-     * Complexity: O(1)
-     *
-     * @return Type
-     */
-    //int getType() const;
 
     /**
      * @brief Get vector with adjacent edges
@@ -85,7 +78,7 @@ public:
     std::vector<Edge *> getIncoming() const;
 
     /**
-     * @brief Get the value of the position in the vector of its type
+     * @brief Get the value of the position in the vector
      *
      * Complexity:  O(1)
      *
@@ -139,12 +132,33 @@ public:
      */
     void removeOutgoingEdges();
 
+    /**
+     * @brief Get longitude
+     *
+     * Complexity: O(1)
+     *
+     * @return Longitude
+     */
+    double getLon() const;
+
+    /**
+     * @brief Get latitude
+     *
+     * Complexity: O(1)
+     *
+     * @return Latitude
+     */
+    double getLat() const;
+
+
+
 protected:
     string info;                    // info node
-    //int type;                       // 0->City; 1->Reservoir; 2->Station
+    double longitude;
+    double latitude;
     std::vector<Edge *> adj;        // outgoing edges
     std::vector<Edge *> incoming;   // incoming edges
-    int vectorPos;                  // position in the vector of its type (citiesVector, reservoirVector, stationsVector)
+    int vectorPos;                  // position in the vector
 
     // auxiliary fields
     bool visited = false;
@@ -294,9 +308,14 @@ public:
      *
      *  Complexity: O(n)
      *
-     *  @return Returns true if successful, and false if a vertex with that content already exists.
+     * @param in : Info
+     * @param pos : Position
+     * @param lon : Longitude
+     * @param lat : Latitude
+     *
+     * @return Returns true if successful, and false if a vertex with that content already exists.
      */
-    bool addVertex(const string &in, int pos);
+    bool addVertex(const string &in, int pos, double lon, double lat);
 
     /**
      * @brief Remove vertex
