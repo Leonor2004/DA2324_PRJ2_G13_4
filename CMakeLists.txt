@@ -12,4 +12,6 @@ add_executable(DA2324_PRJ2_G13_4
         csvInfo.cpp
         csvInfo.cpp
         Graph.cpp
-        Graph.h)
+        Graph.h
+        TSP.cpp
+        TSP.h)
