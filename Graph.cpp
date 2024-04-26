@@ -2,7 +2,7 @@
 
 /************************* Vertex  **************************/
 
-Vertex::Vertex(string in, int pos, double lon, double lat): info(in), vectorPos(pos), longitude(lon), latitude(lat) {}
+Vertex::Vertex(string in, int pos, string lon, string lat): info(in), vectorPos(pos), longitude(lon), latitude(lat) {}
 
 string Vertex::getInfo() const {
     return this->info;
@@ -71,11 +71,11 @@ void Vertex::removeOutgoingEdges() {
     }
 }
 
-double Vertex::getLon() const {
+string Vertex::getLon() const {
     return longitude;
 }
 
-double Vertex::getLat() const {
+string Vertex::getLat() const {
     return latitude;
 }
 
@@ -149,7 +149,7 @@ Vertex* Graph::findVertex(const string &in) const {
     return nullptr;
 }
 
-bool Graph::addVertex(const string &in, int pos, double lon, double lat) {
+bool Graph::addVertex(const string &in, int pos, string lon, string lat) {
     if (findVertex(in) != nullptr)
         return false;
     vertexSet.push_back(new Vertex(in, pos, lon, lat));

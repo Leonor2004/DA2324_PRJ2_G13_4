@@ -189,62 +189,62 @@ void datasetMenu(){
                     menus.emplace("main");
                     return;
                 case 4 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(25);
                     csvInfo::createGraph("25");
                     menus.emplace("main");
                     return;
                 case 5 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(50);
                     csvInfo::createGraph("50");
                     menus.emplace("main");
                     return;
                 case 6 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(75);
                     csvInfo::createGraph("75");
                     menus.emplace("main");
                     return;
                 case 7 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(100);
                     csvInfo::createGraph("100");
                     menus.emplace("main");
                     return;
                 case 8 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(200);
                     csvInfo::createGraph("200");
                     menus.emplace("main");
                     return;
                 case 9 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(300);
                     csvInfo::createGraph("300");
                     menus.emplace("main");
                     return;
                 case 10 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(400);
                     csvInfo::createGraph("400");
                     menus.emplace("main");
                     return;
                 case 11 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(500);
                     csvInfo::createGraph("500");
                     menus.emplace("main");
                     return;
                 case 12 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(600);
                     csvInfo::createGraph("600");
                     menus.emplace("main");
                     return;
                 case 13 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(700);
                     csvInfo::createGraph("700");
                     menus.emplace("main");
                     return;
                 case 14 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(800);
                     csvInfo::createGraph("800");
                     menus.emplace("main");
                     return;
                 case 15 :
-                    csvInfo::createNodes();
+                    csvInfo::createNodes(900);
                     csvInfo::createGraph("900");
                     menus.emplace("main");
                     return;

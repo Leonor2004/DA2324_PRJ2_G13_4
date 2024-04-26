@@ -49,17 +49,19 @@ void csvInfo::createGraph(string graph) {
         getline(s, destino, ',');
         getline(s, distancia);
 
-        bool prov = edgesGraph.addVertex(origem,aux - 1,0,0);
-        if(prov) {aux++;}
-        prov = edgesGraph.addVertex(destino, aux - 1,0,0);
-        if(prov) {aux++;}
+        if(graph == "a" || graph == "b" || graph == "c") {
+            bool prov = edgesGraph.addVertex(origem, aux - 1, 0, 0);
+            if (prov) { aux++; }
+            prov = edgesGraph.addVertex(destino, aux - 1, 0, 0);
+            if (prov) { aux++; }
+        }
         edgesGraph.addEdge(origem, destino, stod(distancia));
         //edgesGraph.addBidirectionalEdge(origem, destino, stod(distancia));
     }
     file.close();
 }
 
-void csvInfo::createNodes() {
+void csvInfo::createNodes(int graph) {
     vertexSet.clear();
     vertexVector.clear();
     fstream file;
@@ -73,17 +75,17 @@ void csvInfo::createNodes() {
     string node;
     string longitude;
     string latitude;
-    int aux = 1;
-    while(getline(file, line)) {
+    int aux = 0;
+    while(getline(file, line) && aux-1<graph) {
         stringstream s(line);
         getline(s, node, ',');
         getline(s, longitude, ',');
         getline(s, latitude);
 
-        // dá erro :(
-        //bool prov = edgesGraph.addVertex(node,aux - 1, stod(longitude),std::stod(latitude));
-        //if(prov) {aux++;}
+        //cout << "Longitude: " << longitude << "Latitude: " << latitude << endl;
+
+        bool prov = edgesGraph.addVertex(node,aux, longitude,latitude);
+        if(prov) {aux++;}
     }
-    cout << "Entrei no nodes!!" << endl;
     file.close();
 }

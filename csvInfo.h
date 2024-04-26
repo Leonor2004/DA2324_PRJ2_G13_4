@@ -43,7 +43,14 @@ public:
      */
     static void createGraph(string graph);
 
-    static void createNodes();
+    /**
+     * @brief Longitude and latitude of Extra Fully Connected Graphs
+     *
+     * Complexity: ???
+     *
+     * @param graph : Number of edges
+     */
+    static void createNodes(int graph);
 
 };
 

@@ -30,7 +30,7 @@ public:
      * @param lon : Longitude
      * @param lat : Latitude
      */
-    Vertex(string in, int pos, double lon, double lat);
+    Vertex(string in, int pos, string lon, string lat);
 
     /**
      * @brief Get info
@@ -139,7 +139,7 @@ public:
      *
      * @return Longitude
      */
-    double getLon() const;
+    string getLon() const;
 
     /**
      * @brief Get latitude
@@ -148,14 +148,14 @@ public:
      *
      * @return Latitude
      */
-    double getLat() const;
+    string getLat() const;
 
 
 
 protected:
     string info;                    // info node
-    double longitude;
-    double latitude;
+    string longitude;
+    string latitude;
     std::vector<Edge *> adj;        // outgoing edges
     std::vector<Edge *> incoming;   // incoming edges
     int vectorPos;                  // position in the vector
@@ -315,7 +315,7 @@ public:
      *
      * @return Returns true if successful, and false if a vertex with that content already exists.
      */
-    bool addVertex(const string &in, int pos, double lon, double lat);
+    bool addVertex(const string &in, int pos, string lon, string lat);
 
     /**
      * @brief Remove vertex
