@@ -1,6 +1,17 @@
 #include "TSP.h"
 #include "cmath"
 
+/**
+ * @brief ???
+ *
+ * Complexity: ???
+ *
+ * @param lat1
+ * @param lon1
+ * @param lat2
+ * @param lon2
+ * @return
+ */
 double haversine(double lat1, double lon1, double lat2, double lon2) {
 
     lat1 = lat1 * M_PI / 180.0;

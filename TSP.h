@@ -23,6 +23,9 @@ private:
 public:
     /**
      * @brief Constructor for the TSP class.
+     *
+     * Complexity: ???
+     *
      * @param graph The adjacency matrix representation of the graph.
      * @param node_data The geographic data of the nodes.
      */
@@ -30,23 +33,34 @@ public:
 
     /**
      * @brief This method creates a minimum spanning tree (MST) of the graph.
+     *
+     * Complexity: ???
      */
     void primMST();
 
     /**
      * @brief This method returns the node with the minimum key value that hasn't been visited yet.
+     *
+     * Complexity: ???
+     *
      * @return The index of the node with the minimum key value.
      */
     int minKey();
 
     /**
      * @brief This method performs a depth-first search (DFS) on the MST.
+     *
+     * Complexity: ???
+     *
      * @param node The node to start the DFS from.
      */
     void dfs(int node);
 
     /**
      * @brief This method solves the TSP using a 2-approximation algorithm.
+     *
+     * Complexity: ???
+     *
      * @return A vector representing the tour of the TSP.
      */
     std::vector<int> tsp_2_approximation();
