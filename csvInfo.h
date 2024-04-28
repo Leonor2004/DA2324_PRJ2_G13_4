@@ -41,7 +41,7 @@ public:
      *
      * @param graph : Graph the user chose
      */
-    static void createGraph(string graph);
+    static void createGraph(int graph);
 
     /**
      * @brief Longitude and latitude of Extra Fully Connected Graphs

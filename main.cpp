@@ -12,7 +12,7 @@
 
 #include <map>
 #include <stack>
-//#include <chrono>
+#include <chrono>
 #include "AuxFunctions.h"
 
 
@@ -145,6 +145,11 @@ void mainMenu() {
     }
 }
 
+/**
+ * @brief Dataset Menu
+ *
+ * Complexity: ???
+ */
 void datasetMenu(){
     int op = 0;
     cout << endl << "----------------------------" << endl;
@@ -177,75 +182,75 @@ void datasetMenu(){
             cout << endl;
             switch (op) {
                 case 1 :
-                    csvInfo::createGraph("a");
+                    csvInfo::createGraph(1);
                     menus.emplace("main");
                     return;
                 case 2 :
-                    csvInfo::createGraph("b");
+                    csvInfo::createGraph(2);
                     menus.emplace("main");
                     return;
                 case 3 :
-                    csvInfo::createGraph("c");
+                    csvInfo::createGraph(3);
                     menus.emplace("main");
                     return;
                 case 4 :
                     csvInfo::createNodes(25);
-                    csvInfo::createGraph("25");
+                    csvInfo::createGraph(25);
                     menus.emplace("main");
                     return;
                 case 5 :
                     csvInfo::createNodes(50);
-                    csvInfo::createGraph("50");
+                    csvInfo::createGraph(50);
                     menus.emplace("main");
                     return;
                 case 6 :
                     csvInfo::createNodes(75);
-                    csvInfo::createGraph("75");
+                    csvInfo::createGraph(75);
                     menus.emplace("main");
                     return;
                 case 7 :
                     csvInfo::createNodes(100);
-                    csvInfo::createGraph("100");
+                    csvInfo::createGraph(100);
                     menus.emplace("main");
                     return;
                 case 8 :
                     csvInfo::createNodes(200);
-                    csvInfo::createGraph("200");
+                    csvInfo::createGraph(200);
                     menus.emplace("main");
                     return;
                 case 9 :
                     csvInfo::createNodes(300);
-                    csvInfo::createGraph("300");
+                    csvInfo::createGraph(300);
                     menus.emplace("main");
                     return;
                 case 10 :
                     csvInfo::createNodes(400);
-                    csvInfo::createGraph("400");
+                    csvInfo::createGraph(400);
                     menus.emplace("main");
                     return;
                 case 11 :
                     csvInfo::createNodes(500);
-                    csvInfo::createGraph("500");
+                    csvInfo::createGraph(500);
                     menus.emplace("main");
                     return;
                 case 12 :
                     csvInfo::createNodes(600);
-                    csvInfo::createGraph("600");
+                    csvInfo::createGraph(600);
                     menus.emplace("main");
                     return;
                 case 13 :
                     csvInfo::createNodes(700);
-                    csvInfo::createGraph("700");
+                    csvInfo::createGraph(700);
                     menus.emplace("main");
                     return;
                 case 14 :
                     csvInfo::createNodes(800);
-                    csvInfo::createGraph("800");
+                    csvInfo::createGraph(800);
                     menus.emplace("main");
                     return;
                 case 15 :
                     csvInfo::createNodes(900);
-                    csvInfo::createGraph("900");
+                    csvInfo::createGraph(900);
                     menus.emplace("main");
                     return;
                 case 0:
