@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <climits>
+#include "csvInfo.h"
 
 
 /**
@@ -29,8 +30,7 @@ public:
      * @param graph The adjacency matrix representation of the graph.
      * @param node_data The geographic data of the nodes.
      */
-    TSP(const std::vector<std::vector<int>>& graph, const std::vector<std::pair<double, double>>& node_data);
-
+    TSP(csvInfo& csv_info, const std::vector<std::pair<double, double>>& node_data);
     /**
      * @brief This method creates a minimum spanning tree (MST) of the graph.
      *

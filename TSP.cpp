@@ -1,16 +1,18 @@
 #include "TSP.h"
 #include "cmath"
+#include "csvInfo.h"
 
 /**
- * @brief ???
+ * @brief Calculates the great-circle distance between two points on a sphere given their longitudes and latitudes.
+ * This method uses the 'Haversine' formula to calculate the distance.
  *
- * Complexity: ???
+ * Complexity: O(1)
  *
  * @param lat1
  * @param lon1
  * @param lat2
  * @param lon2
- * @return
+ * @return The great-circle distance between the two points in kilometers.
  */
 double haversine(double lat1, double lon1, double lat2, double lon2) {
 
@@ -32,13 +34,26 @@ double haversine(double lat1, double lon1, double lat2, double lon2) {
     return c * r;
 }
 
-TSP::TSP(const std::vector<std::vector<int>>& graph, const std::vector<std::pair<double, double>>& node_data)
-        : graph(graph),
-          node_data(node_data),
-          visited(graph.size(), false),
-          parent(graph.size(), -1),
-          key(graph.size(), INT_MAX),
-          num_vertices(graph.size()) {}
+TSP::TSP(csvInfo& csv_info, const std::vector<std::pair<double, double>>& node_data)
+        : node_data(node_data),
+          visited(csv_info.edgesGraph.getVertexSet().size(), false),
+          parent(csv_info.edgesGraph.getVertexSet().size(), -1),
+          key(csv_info.edgesGraph.getVertexSet().size(), INT_MAX),
+          num_vertices(csv_info.edgesGraph.getVertexSet().size()) {
+    // Convert the edgesGraph from csvInfo to the adjacency matrix format used by TSP
+    std::map<std::string, int> vertex_to_index;
+    for (int i = 0; i < csv_info.edgesGraph.getVertexSet().size(); ++i) {
+        vertex_to_index[csv_info.edgesGraph.getVertexSet()[i]->getInfo()] = i;
+    }
+
+    for (const auto& vertex : csv_info.edgesGraph.getVertexSet()) {
+        std::vector<int> row(num_vertices, INT_MAX);
+        for (const auto& edge : vertex->getAdj()) {
+            row[vertex_to_index[edge->getDest()->getInfo()]] = edge->getWeight();
+        }
+        graph.push_back(row);
+    }
+}
 
 void TSP::primMST() {
     bool hasEdges = false;
