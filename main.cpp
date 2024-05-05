@@ -276,3 +276,40 @@ void algo(){
     AuxFunctions::test();
     over = true;
 }
+
+/**
+void mainMenu() {
+    // ...
+    cout << "16 - (T2.2) Triangular Approximation Heuristic" << endl;
+    // ...
+
+    while (true) {
+        cout << "Write the number of what you want to do: ";
+        if (cin >> op) {
+            cout << endl;
+            switch (op) {
+                // ...
+                case 16:
+                    // Get the csvInfo and node_data from the user's selection
+                    csvInfo csv_info = csvInfo::createGraph(selected_option);
+                    std::vector<std::pair<double, double>> node_data = csvInfo::createNodes(selected_option);
+
+                    // Create a TSP object with the necessary parameters
+                    TSP tsp_object(csv_info, node_data);
+
+                    // Call the tsp_2_approximation function and store the result
+                    std::vector<int> tour = tsp_object.tsp_2_approximation();
+
+                    // Print the tour
+                    for (int city : tour) {
+                        std::cout << city << " ";
+                    }
+                    std::cout << std::endl;
+                    return;
+                    // ...
+            }
+        }
+        // ...
+    }
+}
+To add to the final menu*/

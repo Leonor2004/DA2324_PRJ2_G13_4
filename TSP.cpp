@@ -108,9 +108,16 @@ void TSP::dfs(int node) {
 
 
 std::vector<int> TSP::tsp_2_approximation() {
+    // Clear the tour vector
     tour.clear();
 
+    // Create a minimum spanning tree (MST) of the graph
+    primMST();
+
+    // Perform a depth-first search (DFS) on the MST to generate a tour
     dfs(0);
+
+    // Return to the starting city to complete the tour
     tour.push_back(0);
 
     return tour;
