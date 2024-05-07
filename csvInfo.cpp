@@ -70,8 +70,8 @@ void csvInfo::createGraph(int graph) {
             }
 
         }
-        edgesGraph.addEdge(origem, destino, stod(distancia));
-        //edgesGraph.addBidirectionalEdge(origem, destino, stod(distancia));
+        //edgesGraph.addEdge(origem, destino, stod(distancia));
+        edgesGraph.addBidirectionalEdge(origem, destino, stod(distancia));
     }
     file.close();
 }
