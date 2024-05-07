@@ -115,7 +115,7 @@ void mainMenu() {
     cout << endl << "----------------------------" << endl;
     cout << endl << "      Main Menu   " << endl;
     cout << endl << "----------------------------" << endl;
-    cout << "1 - backtracking." << endl;
+    cout << "1 - T2.1 - Backtracking Algorithm." << endl;
     cout << "0 - Quit." << endl;
     cout << endl;
     cout << "Note: If you enter a 'q' when asked for an input," << endl;
@@ -275,14 +275,36 @@ void datasetMenu(){
     over = true;
 }*/
 
+//cout << "vertexSet size: " << graph.getVertexSet().size() << endl;
+
+
 void solveTSPBacktracking(Graph& graph) {
-    //cout << "vertexSet size: " << graph.getVertexSet().size() << endl;
+    auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
+
     string startNode = "0";
 
     vector<string> tour;
     vector<vector<string>> minTour;
     double min = INT_MAX;
     AuxFunctions::backtrack(startNode, tour, graph, min, minTour);
+
+    auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
+
+    // Calculate duration
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+
+    // Calculate minutes, seconds, and remaining microseconds
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    duration -= minutes;
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    duration -= seconds;
+
+    // Print time taken
+    std::cout << "Time taken by Backtracking: "
+              << minutes.count() << " minutes "
+              << seconds.count() << " seconds "
+              << duration.count() << " microseconds" << std::endl;
+
     cout << "Min Tour(s):" << endl;
     for (const auto& a : minTour) {
         for (const string& node : a){
