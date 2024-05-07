@@ -337,6 +337,18 @@ public:
      */
     bool addEdge(const string &sourc, const string &dest, double w);
 
+
+    /**
+     * @brief Get edge between source and destination
+     *
+     * Complexity: 0(n)
+     *
+     * @param source : Source
+     * @param destination : Destination
+     * @return Edge
+     */
+    Edge* getEdge(const string& source, const string& destination) const;
+
     /**
      * @brief Add bidirectional edge
      *

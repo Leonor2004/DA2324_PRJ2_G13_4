@@ -186,6 +186,25 @@ bool Graph::addEdge(const string &sourc, const string &dest, double w) {
     return true;
 }
 
+Edge* Graph::getEdge(const string& source, const string& destination) const {
+    // Iterate through each vertex in the graph
+    for (Vertex* vertex : vertexSet) {
+        // Iterate through the outgoing edges of the vertex
+        for (Edge* edge : vertex->getAdj()) {
+            // Check if the edge's origin vertex info matches the source vertex
+            if (edge->getOrig()->getInfo() == source) {
+                // Check if the edge's destination vertex info matches the destination vertex
+                if (edge->getDest()->getInfo() == destination) {
+                    // Return the edge if found
+                    return edge;
+                }
+            }
+        }
+    }
+    // Return nullptr if no matching edge is found
+    return nullptr;
+}
+
 bool Graph::addBidirectionalEdge(const string &sourc, const string &dest, double w) {
     auto v1 = findVertex(sourc);
     auto v2 = findVertex(dest);

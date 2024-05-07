@@ -17,7 +17,7 @@
 
 
 
-map<string, int> m = {{"dataset", 0}, {"main", 1},{"algo", 2}};
+map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}};
 stack<string> menus;
 bool over = false;
 bool quit = false;
@@ -27,8 +27,8 @@ void clearMenus();
 int main();
 void mainMenu();
 void datasetMenu();
-void algo();
-
+//void algo();
+void solveTSPBacktracking(Graph& graph);
 
 /**
  * @brief Clears all the menus
@@ -64,7 +64,7 @@ int main() {
                 mainMenu();
                 break;
             case 2:
-                algo();
+                solveTSPBacktracking(csvInfo::edgesGraph);
                 break;
             default:
                 quit = true;
@@ -115,7 +115,7 @@ void mainMenu() {
     cout << endl << "----------------------------" << endl;
     cout << endl << "      Main Menu   " << endl;
     cout << endl << "----------------------------" << endl;
-    cout << "1 - algo." << endl;
+    cout << "1 - backtracking." << endl;
     cout << "0 - Quit." << endl;
     cout << endl;
     cout << "Note: If you enter a 'q' when asked for an input," << endl;
@@ -128,7 +128,7 @@ void mainMenu() {
             cout << endl;
             switch (op) {
                 case 1 :
-                    menus.emplace("algo");
+                    menus.emplace("backtracking");
                     return;
                 case 0:
                     quit = true;
@@ -268,14 +268,32 @@ void datasetMenu(){
     }
 }
 
-/**
- * @brief à de ser algo :)
- */
-void algo(){
+//para testar (apagar no final)
+/*void algo(){
     cout << "entrei no algo";
     AuxFunctions::test();
     over = true;
+}*/
+
+void solveTSPBacktracking(Graph& graph) {
+    //cout << "vertexSet size: " << graph.getVertexSet().size() << endl;
+    string startNode = "0";
+
+    vector<string> tour;
+    vector<vector<string>> minTour;
+    double min = INT_MAX;
+    AuxFunctions::backtrack(startNode, tour, graph, min, minTour);
+    cout << "Min Tour(s):" << endl;
+    for (const auto& a : minTour) {
+        for (const string& node : a){
+            cout << node << " ";
+        }
+        cout << endl;
+    }
+    cout << "Distance: " << min << endl;
+    over = true;
 }
+
 
 /**
 void mainMenu() {
