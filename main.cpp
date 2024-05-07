@@ -28,7 +28,7 @@ int main();
 void mainMenu();
 void datasetMenu();
 //void algo();
-void solveTSPBacktracking(Graph& graph);
+void solveTSPBacktracking();
 
 /**
  * @brief Clears all the menus
@@ -64,7 +64,7 @@ int main() {
                 mainMenu();
                 break;
             case 2:
-                solveTSPBacktracking(csvInfo::edgesGraph);
+                solveTSPBacktracking();
                 break;
             default:
                 quit = true;
@@ -275,36 +275,35 @@ void datasetMenu(){
     over = true;
 }*/
 
-//cout << "vertexSet size: " << graph.getVertexSet().size() << endl;
 
-
-void solveTSPBacktracking(Graph& graph) {
+/**
+ * @brief Backtracking Algorithm
+ *
+ * Complexity: ???
+ */
+void solveTSPBacktracking() {
+    //cout << "vertexSet size: " << graph.getVertexSet().size() << endl;
     auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
-
     string startNode = "0";
 
     vector<string> tour;
     vector<vector<string>> minTour;
     double min = INT_MAX;
-    AuxFunctions::backtrack(startNode, tour, graph, min, minTour);
+    AuxFunctions::backtrack(startNode, tour, csvInfo::edgesGraph, min, minTour);
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
-
-    // Calculate duration
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
-
-    // Calculate minutes, seconds, and remaining microseconds
     auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
     duration -= minutes;
     auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
     duration -= seconds;
 
-    // Print time taken
+    cout << endl;
     std::cout << "Time taken by Backtracking: "
               << minutes.count() << " minutes "
               << seconds.count() << " seconds "
-              << duration.count() << " microseconds" << std::endl;
-
+              << duration.count() << " microseconds" << endl;
+    cout << endl;
     cout << "Min Tour(s):" << endl;
     for (const auto& a : minTour) {
         for (const string& node : a){

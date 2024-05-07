@@ -20,26 +20,26 @@ public:
     //static void test();
 
     /**
-     * @brief ???
+     * @brief Calculate tour distance
      *
-     * Complexity: ???
+     * Complexity: O(n^2)
      *
-     * @param tour
-     * @param graph
-     * @return
+     * @param tour : Tour
+     * @param graph : Graph
+     * @return Tour distance
      */
     static double calculateTourDistance(const vector<string> &tour, const Graph &graph);
 
     /**
-     * @brief ???
+     * @brief Backtrack Algorithm
      *
      * Complexity: ???
      *
-     * @param current
-     * @param tour
-     * @param graph
-     * @param minDistance
-     * @param minTour
+     * @param current : Current node
+     * @param tour : Tour
+     * @param graph : Graph
+     * @param minDistance : Minimum Distance
+     * @param minTour : Minimum Distance Tours
      */
     static void backtrack(string current, vector<string> &tour, Graph &graph, double &minDistance, vector<vector<string>> &minTour);
 };
