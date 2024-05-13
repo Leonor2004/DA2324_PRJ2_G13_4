@@ -13,6 +13,8 @@ AuxFunctions::AuxFunctions() = default;
     }
 }*/
 
+
+
 double AuxFunctions::calculateTourDistance(const vector<string>& tour, const Graph& graph) {
     double distance = 0.0;
     for (size_t i = 0; i < tour.size() - 1; ++i) {

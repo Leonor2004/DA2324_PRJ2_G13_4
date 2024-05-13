@@ -52,6 +52,7 @@ public:
      */
     static void createNodes(int graph);
 
+    static bool findEdge(int node1, int node2);
 };
 
 #endif //DA2324_PRJ2_G13_4_CSVINFO_H

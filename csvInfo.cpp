@@ -108,3 +108,20 @@ void csvInfo::createNodes(int graph) {
     }
     file.close();
 }
+
+
+bool csvInfo::findEdge(int node1, int node2) {
+    // Iterate over the adjacency list of node1
+    for (auto vertex : edgesGraph.getVertexSet()) {
+        if(vertex->getInfo() == std::to_string(node1)) {
+            for (auto edge: vertex->getAdj()) {
+                // If an edge exists between node1 and node2, return true
+                if (edge->getDest()->getInfo() == std::to_string(node2)) {
+                    return true;
+                }
+            }
+        }
+    }
+    // If no edge exists between node1 and node2, return false
+    return false;
+}

@@ -14,10 +14,11 @@
 #include <stack>
 #include <chrono>
 #include "AuxFunctions.h"
+#include "TSP.h"
 
 
 
-map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}};
+map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}, {"triangular", 3}};
 stack<string> menus;
 bool over = false;
 bool quit = false;
@@ -29,6 +30,7 @@ void mainMenu();
 void datasetMenu();
 //void algo();
 void solveTSPBacktracking();
+void tsp_2_approximation();
 
 /**
  * @brief Clears all the menus
@@ -65,6 +67,9 @@ int main() {
                 break;
             case 2:
                 solveTSPBacktracking();
+                break;
+            case 3:
+                tsp_2_approximation();
                 break;
             default:
                 quit = true;
@@ -116,6 +121,7 @@ void mainMenu() {
     cout << endl << "      Main Menu   " << endl;
     cout << endl << "----------------------------" << endl;
     cout << "1 - T2.1 - Backtracking Algorithm." << endl;
+    cout << "2 - T2.2 - Triangular Approximation Heuristic." << endl;
     cout << "0 - Quit." << endl;
     cout << endl;
     cout << "Note: If you enter a 'q' when asked for an input," << endl;
@@ -129,6 +135,9 @@ void mainMenu() {
             switch (op) {
                 case 1 :
                     menus.emplace("backtracking");
+                    return;
+                case 2 :
+                    menus.emplace("triangular");
                     return;
                 case 0:
                     quit = true;
@@ -315,6 +324,45 @@ void solveTSPBacktracking() {
     over = true;
 }
 
+
+
+void tsp_2_approximation() {
+
+    auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
+
+    std::vector<int> tour; ///< Stores nodes in the order they are visited in the tour.
+    // Clear the tour vector
+    tour.clear();
+
+    // Create a minimum spanning tree (MST) of the graph
+    TSP::primMST();
+
+    // Perform a depth-first search (DFS) on the MST to generate a tour
+    TSP::dfs(0, tour);
+
+    // Return to the starting city to complete the tour
+    //tour.push_back(0);
+
+    auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    duration -= minutes;
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    duration -= seconds;
+
+    cout << endl;
+    std::cout << "Time taken by Triangular Approximation Heuristic: "
+              << minutes.count() << " minutes "
+              << seconds.count() << " seconds "
+              << duration.count() << " microseconds" << endl;
+    cout << endl;
+
+    //return tour;
+    for (int city : tour) {
+        std::cout << city << " ";
+    }
+    over = true;
+}
 
 /**
 void mainMenu() {
