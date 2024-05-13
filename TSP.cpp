@@ -22,7 +22,7 @@ unsigned long num_vertices; ///< Number of vertices in the graph.
  * @param lon2
  * @return The great-circle distance between the two points in kilometers.
  */
-double haversine(float lat1, float lon1, float lat2, float lon2) {
+double haversine(double lat1, double lon1, double lat2, double lon2) {
 
     lat1 = lat1 * M_PI / 180.00;
     lon1 = lon1 * M_PI / 180.00;
@@ -56,7 +56,7 @@ void TSP::primMST() {
 
     // Initialize node_data with geographic coordinates of nodes
     for (int i = 0; i < num_vertices; ++i) {
-        node_data.emplace_back(stof(csvInfo::edgesGraph.getVertexSet()[i]->getLat()), stof(csvInfo::edgesGraph.getVertexSet()[i]->getLon()));
+        node_data.emplace_back(csvInfo::edgesGraph.getVertexSet()[i]->getLat(), csvInfo::edgesGraph.getVertexSet()[i]->getLon());
     }
 
     // Initialize visited, parent, and key vectors

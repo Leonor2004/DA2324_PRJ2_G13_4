@@ -56,16 +56,16 @@ void csvInfo::createGraph(int graph) {
 
         bool prov = false;
         if(graph < 4) {
-            prov = edgesGraph.addVertex(origem, aux - 1, "0", "0");
+            prov = edgesGraph.addVertex(origem, aux - 1, 0, 0);
             if (prov) {
                 vertexSet.insert(origem);
-                vertexVector.push_back(Vertex(origem, aux - 1, "0", "0"));
+                vertexVector.push_back(Vertex(origem, aux - 1, 0, 0));
                 aux++;
             }
-            prov = edgesGraph.addVertex(destino, aux - 1, "0", "0");
+            prov = edgesGraph.addVertex(destino, aux - 1, 0, 0);
             if (prov) {
                 vertexSet.insert(destino);
-                vertexVector.push_back(Vertex(destino, aux - 1, "0", "0"));
+                vertexVector.push_back(Vertex(destino, aux - 1, 0, 0));
                 aux++;
             }
 
@@ -91,18 +91,23 @@ void csvInfo::createNodes(int graph) {
     string longitude;
     string latitude;
     int aux = 0;
+    getline(file, line);
     while(getline(file, line) && aux-1<graph) {
         stringstream s(line);
         getline(s, node, ',');
         getline(s, longitude, ',');
         getline(s, latitude);
+        std::cout << "lat: " << latitude << std::endl;
+        std::cout << "lon: " << longitude << std::endl;
 
+        double convertedLat = std::stod(latitude);
+        double convertedLon = std::stod(longitude);
         //cout << "Longitude: " << longitude << "Latitude: " << latitude << endl;
 
-        bool prov = edgesGraph.addVertex(node,aux, longitude,latitude);
+        bool prov = edgesGraph.addVertex(node,aux, convertedLon,convertedLat);
         if(prov) {
             vertexSet.insert(node);
-            vertexVector.push_back(Vertex(node, aux - 1, "0", "0"));
+            vertexVector.push_back(Vertex(node, aux - 1, 0, 0));
             aux++;
         }
     }
