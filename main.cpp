@@ -357,17 +357,20 @@ void tsp_2_approximation() {
 
     std::vector<string> tour; ///< Stores nodes in the order they are visited in the tour.
     // Clear the tour vector
-    tour.clear();
+
 
     vector<string> prim;
     // Create a minimum spanning tree (MST) of the graph
     AuxFunctions::primMST(prim);
-    cout << "sai do prim" << endl;
+
+
     for (auto a : prim){
         Vertex* v = csvInfo::edgesGraph.findVertex(a);
         v->setVisited(false);
+        cout << csvInfo::edgesGraph.findVertex(a)->isVisited();
     }
 
+    tour.clear();
     AuxFunctions::triangular("0", tour, prim);
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time

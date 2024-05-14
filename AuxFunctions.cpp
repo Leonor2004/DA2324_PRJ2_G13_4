@@ -164,27 +164,33 @@ void AuxFunctions::primMST(vector<string>& prim) {
 void AuxFunctions::triangular(string node, vector<string>& tour, vector<string>& prim) {
     Vertex* v = csvInfo::edgesGraph.findVertex(node);
     v->setVisited(true);
-    tour.push_back(node);
 
     Vertex* previousVertex = nullptr;
     Vertex* lastVertex = nullptr;
     double totalDistance = 0;
+    bool conecao;
+
     for (auto nextNode : prim) {
         Vertex* nextVertex = csvInfo::edgesGraph.findVertex(nextNode);
         if(previousVertex != nullptr){
-            if (!nextVertex->isVisited()) {
-                double distance = haversine(v->getLat(), v->getLon(),nextVertex->getLat(), nextVertex->getLon());
-                totalDistance += distance;
-                if (totalDistance <= 2 * haversine(v->getLat(), v->getLon(),lastVertex->getLat(), lastVertex->getLon())) {
-                    tour.push_back(nextNode);
-                    nextVertex->setVisited(true);
-                    previousVertex = v;
-                    v = nextVertex;
-                    lastVertex = v;
-                } else {
-                    tour.push_back(prim.front()); //back to the starting node
+            conecao = false;
+            for (auto e : previousVertex->getAdj()) {
+                if (e->getDest() == nextVertex) {
+                    if (!nextVertex->isVisited()) {
+                        totalDistance += e->getWeight();
+                        tour.push_back(nextVertex->getInfo());
+                        nextVertex->setVisited(true);
+                        previousVertex = nextVertex;
+                    }
+                    conecao = true;
                     break;
                 }
+            }
+            if (!conecao) {
+                nextVertex->setVisited(true);
+                totalDistance += haversine(previousVertex->getLat(), previousVertex->getLon(), nextVertex->getLat(), nextVertex->getLon());
+                tour.push_back(nextVertex->getInfo());
+                previousVertex = nextVertex;
             }
         } else {
             previousVertex = nextVertex;
@@ -192,5 +198,17 @@ void AuxFunctions::triangular(string node, vector<string>& tour, vector<string>&
             lastVertex = nextVertex;
         }
     }
+    tour.push_back("0");
+
+    for (auto edge: previousVertex->getAdj()) {
+        if (edge->getDest() == lastVertex) {
+            totalDistance += edge->getWeight();
+        }
+    }
+
+    if (previousVertex != nullptr) {
+        totalDistance += haversine(csvInfo::edgesGraph.findVertex("0")->getLat(), csvInfo::edgesGraph.findVertex("0")->getLon(), lastVertex->getLat(), lastVertex->getLon());
+    }
+
 }
 
