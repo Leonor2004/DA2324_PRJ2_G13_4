@@ -22,6 +22,7 @@ map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}, {"triangu
 stack<string> menus;
 bool over = false;
 bool quit = false;
+int graphN = 0;
 
 void clearMenus();
 
@@ -126,7 +127,11 @@ void mainMenu() {
     cout << endl << "----------------------------" << endl;
     cout << endl << "      Main Menu   " << endl;
     cout << endl << "----------------------------" << endl;
-    cout << "1 - T2.1 - Backtracking Algorithm." << endl;
+    if(graphN > 5){
+        cout << "Backtracking Algorithm not possible for bigger graphs." << endl;
+    } else {
+        cout << "1 - T2.1 - Backtracking Algorithm." << endl;
+    }
     cout << "2 - T2.2 - Triangular Approximation Heuristic." << endl;
     cout << "3" << endl;
     cout << "4 - Change dataset" << endl;
@@ -142,7 +147,12 @@ void mainMenu() {
             cout << endl;
             switch (op) {
                 case 1 :
-                    menus.emplace("backtracking");
+                    if(graphN > 5){
+                        cout << "Backtracking Algorithm not possible for bigger graphs." << endl;
+                        menus.emplace("main");
+                    } else {
+                        menus.emplace("backtracking");
+                    }
                     return;
                 case 2 :
                     menus.emplace("triangular");
@@ -207,74 +217,89 @@ void datasetMenu(){
             switch (op) {
                 case 1 :
                     csvInfo::createGraph(1);
+                    graphN = 1;
                     menus.emplace("main");
                     return;
                 case 2 :
                     csvInfo::createGraph(2);
+                    graphN = 2;
                     menus.emplace("main");
                     return;
                 case 3 :
                     csvInfo::createGraph(3);
+                    graphN = 3;
                     menus.emplace("main");
                     return;
                 case 4 :
                     csvInfo::createNodes(25);
                     csvInfo::createGraph(25);
+                    graphN = 25;
                     menus.emplace("main");
                     return;
                 case 5 :
                     csvInfo::createNodes(50);
                     csvInfo::createGraph(50);
+                    graphN = 50;
                     menus.emplace("main");
                     return;
                 case 6 :
                     csvInfo::createNodes(75);
                     csvInfo::createGraph(75);
+                    graphN = 75;
                     menus.emplace("main");
                     return;
                 case 7 :
                     csvInfo::createNodes(100);
                     csvInfo::createGraph(100);
+                    graphN = 100;
                     menus.emplace("main");
                     return;
                 case 8 :
                     csvInfo::createNodes(200);
                     csvInfo::createGraph(200);
+                    graphN = 200;
                     menus.emplace("main");
                     return;
                 case 9 :
                     csvInfo::createNodes(300);
                     csvInfo::createGraph(300);
+                    graphN = 300;
                     menus.emplace("main");
                     return;
                 case 10 :
                     csvInfo::createNodes(400);
                     csvInfo::createGraph(400);
+                    graphN = 400;
                     menus.emplace("main");
                     return;
                 case 11 :
                     csvInfo::createNodes(500);
                     csvInfo::createGraph(500);
+                    graphN = 500;
                     menus.emplace("main");
                     return;
                 case 12 :
                     csvInfo::createNodes(600);
                     csvInfo::createGraph(600);
+                    graphN = 600;
                     menus.emplace("main");
                     return;
                 case 13 :
                     csvInfo::createNodes(700);
                     csvInfo::createGraph(700);
+                    graphN = 700;
                     menus.emplace("main");
                     return;
                 case 14 :
                     csvInfo::createNodes(800);
                     csvInfo::createGraph(800);
+                    graphN = 800;
                     menus.emplace("main");
                     return;
                 case 15 :
                     csvInfo::createNodes(900);
                     csvInfo::createGraph(900);
+                    graphN = 900;
                     menus.emplace("main");
                     return;
                 case 0:
