@@ -13,5 +13,4 @@ add_executable(DA2324_PRJ2_G13_4
         csvInfo.cpp
         Graph.cpp
         Graph.h
-        TSP.cpp
-        TSP.h)
+        MutablePriorityQueue.h)

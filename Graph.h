@@ -6,6 +6,7 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
+#include "MutablePriorityQueue.h"
 
 using namespace std;
 
@@ -33,6 +34,16 @@ public:
     Vertex(string in, int pos, double lon, double lat);
 
     /**
+     * @brief < operator to compare distance
+     *
+     * Complexity:
+     *
+     * @param vertex : Vertex
+     * @return True or false
+     */
+    bool operator<(Vertex & vertex) const;
+
+    /**
      * @brief Get info
      *
      * Complexity: O(1)
@@ -49,6 +60,15 @@ public:
      * @return Adjacent edges
      */
     std::vector<Edge *> getAdj() const;
+
+    /**
+     * @brief Get distancia
+     *
+     * Complexity: O(1)
+     *
+     * @return dist
+     */
+    double getDist() const;
 
     /**
      * @brief Check if is visited
@@ -85,6 +105,15 @@ public:
      * @return Position
      */
     int getPos();
+
+    /**
+     * @brief Set distancia
+     *
+     * Complexity: O(1)
+     *
+     * @param dist : Distance
+     */
+    void setDist(double dist);
 
     /**
      * @brief Set visited
@@ -150,7 +179,7 @@ public:
      */
     double getLat() const;
 
-
+    friend class MutablePriorityQueue<Vertex>;
 
 protected:
     string info;                    // info node
@@ -161,8 +190,11 @@ protected:
     int vectorPos;                  // position in the vector
 
     // auxiliary fields
+    double dist = 0;
     bool visited = false;
     Edge *path = nullptr;
+
+    int queueIndex = 0; //MutablePriorityQueue
 
     /**
      * @brief Constructor for Vertex class

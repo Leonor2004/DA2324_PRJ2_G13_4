@@ -14,11 +14,11 @@
 #include <stack>
 #include <chrono>
 #include "AuxFunctions.h"
-#include "TSP.h"
 
 
 
-map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}, {"triangular", 3}};
+
+map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}, {"triangular", 3}, {"otherTSP", 4},};
 stack<string> menus;
 bool over = false;
 bool quit = false;
@@ -71,6 +71,12 @@ int main() {
             case 3:
                 tsp_2_approximation();
                 break;
+            case 4:
+                //topico 5
+                break;
+            case 5:
+                //topico 4
+                break;
             default:
                 quit = true;
         }
@@ -122,6 +128,8 @@ void mainMenu() {
     cout << endl << "----------------------------" << endl;
     cout << "1 - T2.1 - Backtracking Algorithm." << endl;
     cout << "2 - T2.2 - Triangular Approximation Heuristic." << endl;
+    cout << "3" << endl;
+    cout << "4 - Change dataset" << endl;
     cout << "0 - Quit." << endl;
     cout << endl;
     cout << "Note: If you enter a 'q' when asked for an input," << endl;
@@ -139,11 +147,18 @@ void mainMenu() {
                 case 2 :
                     menus.emplace("triangular");
                     return;
+                case 3 :
+                    //menu3
+                    return;
+                case 4 :
+                    csvInfo::edgesGraph = Graph();
+                    menus.emplace("dataset");
+                    return;
                 case 0:
                     quit = true;
                     return;
                 default:
-                    cout << "Invalid number! The number should be between 0 and 7." << endl;
+                    cout << "Invalid number! The number should be between 0 and 4." << endl;
             }
         }
         else {
@@ -291,20 +306,23 @@ void datasetMenu(){
  * Complexity: O(n^3)
  */
 void solveTSPBacktracking() {
-    //cout << "vertexSet size: " << graph.getVertexSet().size() << endl;
+
+    cout << "vertexSet size: " << csvInfo::edgesGraph.getVertexSet().size() << endl;
     auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
     string startNode = "0";
 
+    for (auto a : csvInfo::edgesGraph.getVertexSet()){
+        a->setVisited(false);
+    }
+
     vector<string> tour;
-    vector<vector<string>> minTour;
+    vector<string> minTour;
     double min = INT_MAX;
     double tourDistance = 0;
     tour.push_back("0");
+
     AuxFunctions::backtrack(startNode, tour, csvInfo::edgesGraph, min, tourDistance, minTour);
 
-    for (auto a : minTour){
-        a.push_back("0");
-    }
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
@@ -312,20 +330,21 @@ void solveTSPBacktracking() {
     duration -= minutes;
     auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
     duration -= seconds;
+    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+    duration -= milliseconds;
 
     cout << endl;
     std::cout << "Time taken by Backtracking: "
-              << minutes.count() << " minutes "
-              << seconds.count() << " seconds "
-              << duration.count() << " microseconds" << endl;
+            << minutes.count() << " minutes "
+            << seconds.count() << " seconds "
+            << duration.count() << " milliseconds "
+            << duration.count() << " microseconds" << endl;
     cout << endl;
-    cout << "Min Tour(s):" << endl;
-    for (const auto& a : minTour) {
-        for (const string& node : a){
-            cout << node << " ";
-        }
-        cout << endl;
-    }
+    cout << "Minimum Tour using Backtracking algorithm:" << endl;
+    for (auto a : minTour) {
+        cout << a << " ";
+
+    } cout << endl;
     cout << "Distance: " << min << endl;
     over = true;
 }
@@ -336,18 +355,20 @@ void tsp_2_approximation() {
 
     auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
 
-    std::vector<int> tour; ///< Stores nodes in the order they are visited in the tour.
+    std::vector<string> tour; ///< Stores nodes in the order they are visited in the tour.
     // Clear the tour vector
     tour.clear();
 
+    vector<string> prim;
     // Create a minimum spanning tree (MST) of the graph
-    AuxFunctions::primMST();
+    AuxFunctions::primMST(prim);
+    cout << "sai do prim" << endl;
+    for (auto a : prim){
+        Vertex* v = csvInfo::edgesGraph.findVertex(a);
+        v->setVisited(false);
+    }
 
-    // Perform a depth-first search (DFS) on the MST to generate a tour
-    AuxFunctions::dfs(0, tour);
-
-    // Return to the starting city to complete the tour
-    tour.push_back(0);
+    AuxFunctions::triangular("0", tour, prim);
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
@@ -355,17 +376,27 @@ void tsp_2_approximation() {
     duration -= minutes;
     auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
     duration -= seconds;
+    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+    duration -= milliseconds;
 
     cout << endl;
     std::cout << "Time taken by Triangular Approximation Heuristic: "
               << minutes.count() << " minutes "
               << seconds.count() << " seconds "
+              << duration.count() << " milliseconds "
               << duration.count() << " microseconds" << endl;
     cout << endl;
 
-    //return tour;
-    for (int city : tour) {
-        std::cout << city << " ";
-    }
+    double min = AuxFunctions::calculateTourDistance(tour, csvInfo::edgesGraph);
+
+    for (auto a : tour) {
+        if (!a.empty()) {
+            cout << a << " ";
+        } else {
+            cout << "No tour found!" << endl;
+        }
+    } cout << endl;
+    cout << "Distance: " << min << endl;
+
     over = true;
 }

@@ -4,6 +4,10 @@
 
 Vertex::Vertex(string in, int pos, double lon, double lat): info(in), vectorPos(pos), longitude(lon), latitude(lat) {}
 
+bool Vertex::operator<(Vertex & vertex) const {
+    return this->dist < vertex.dist;
+}
+
 string Vertex::getInfo() const {
     return this->info;
 }
@@ -11,6 +15,10 @@ string Vertex::getInfo() const {
 
 std::vector<Edge*> Vertex::getAdj() const {
     return this->adj;
+}
+
+double Vertex::getDist() const {
+    return this->dist;
 }
 
 bool Vertex::isVisited() const {
@@ -25,8 +33,12 @@ std::vector<Edge *> Vertex::getIncoming() const {
     return this->incoming;
 }
 
-int Vertex::getPos() {
+/*int Vertex::getPos() {
     return this->vectorPos;
+}*/
+
+void Vertex::setDist(double dist) {
+    this->dist = dist;
 }
 
 void Vertex::setVisited(bool visited) {

@@ -54,24 +54,17 @@ public:
      * @param minDistance : Minimum Distance
      * @param minTour : Minimum Distance Tours
      */
-    static void backtrack(string current, vector<string> &tour, Graph &graph, double &minDistance,double& tourDistance, vector<vector<string>> &minTour);
+    static void backtrack(string current, vector<string> &tour, Graph &graph, double &minDistance,double& tourDistance, vector<string>& minTour);
 
     //topico 2
     /**
      * @brief This method creates a minimum spanning tree (MST) of the graph.
      *
      * Complexity: O(n^2)
-     */
-    static void primMST();
-
-    /**
-     * @brief This method returns the node with the minimum key value that hasn't been visited yet.
      *
-     * Complexity: O(n)
-     *
-     * @return The index of the node with the minimum key value.
+     * COMPLETAR ???
      */
-    static int minKey();
+    static void primMST(vector<string>& prim);
 
     /**
      * @brief This method performs a depth-first search (DFS) on the MST.
@@ -80,7 +73,7 @@ public:
      *
      * @param node The node to start the DFS from.
      */
-     static void dfs(int node, vector<int> &tour);
+     static void triangular(string node, vector<string>& tour, vector<string>& prim);
 
 };
 

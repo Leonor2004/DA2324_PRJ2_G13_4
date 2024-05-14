@@ -1,12 +1,13 @@
 #include "AuxFunctions.h"
+#include "MutablePriorityQueue.h"
 #include <cmath>
 
-static vector<std::vector<string>> graphs; ///< Adjacency matrix of the graph.
-vector<std::pair<float, float>> node_data; ///< Geographic coordinates of nodes.
-vector<bool> visited; ///< Tracks visited nodes during graph traversal.
-vector<int> parent; ///< Stores parent node of each node in the MST.
-vector<int> key; ///< Stores minimum key values of nodes.
-unsigned long num_vertices; ///< Number of vertices in the graph.
+//static vector<vector<string>> graphs; ///< Adjacency matrix of the graph.
+//vector<pair<float, float>> node_data; ///< Geographic coordinates of nodes.
+//vector<bool> visited; ///< Tracks visited nodes during graph traversal. // não é preciso
+//vector<int> parent; ///< Stores parent node of each node in the MST.
+//vector<int> key; ///< Stores minimum key values of nodes.
+//unsigned long num_vertices; ///< Number of vertices in the graph.
 
 AuxFunctions::AuxFunctions() = default;
 
@@ -68,136 +69,128 @@ bool AuxFunctions::findEdge(int node1, int node2) {
     return false;
 }
 
+double AuxFunctions::calculateTourDistance(const vector<string>& tour, const Graph& graph) {
+    double distance = 0.0;
+    for (size_t i = 0; i < tour.size() - 1; ++i) {
+        const string& source = tour[i];
+        const string& destination = tour[i + 1];
+        Edge* edge = graph.getEdge(source, destination);
+        if (edge) {
+            distance += edge->getWeight();
+        }
+    }
+    return distance;
+}
 
-void AuxFunctions::backtrack(string current, vector<string>& tour, Graph& graph, double& minDistance, double& tourDistance, vector<vector<string>>& minTour) {
-    //cout << "Current :" << current << endl;
+void AuxFunctions::backtrack(string current, vector<string>& tour, Graph& graph, double& minDistance, double& tourDistance, vector<string>& minTour) {
     Vertex* currentVertex = graph.findVertex(current);
+    //cout << currentVertex->getInfo() << " ";
 
-    if (tour.size() == graph.getVertexSet().size() && currentVertex->getInfo() == "0") {
+    if (tour.size() == graph.getVertexSet().size()+1 && currentVertex->getInfo() == "0") {
         if (tourDistance < minDistance) {
             minDistance = tourDistance;
-            minTour.clear();
-            minTour.push_back(tour);
-        } else if (tourDistance == minDistance) {
-            minTour.push_back(tour);
+            minTour = tour;
+            for (auto a : tour){
+                cout << a << " ";
+            } cout << endl;
         }
         return;
-    } else {
-        for (const Edge* edge : currentVertex->getAdj()) {
-            Vertex* nextVertex = edge->getDest();
-            if (!nextVertex->isVisited()) {
-                if (tourDistance + edge->getWeight() >= minDistance) {
-                    continue;
-                }
-                tour.push_back(nextVertex->getInfo());
-                nextVertex->setVisited(true);
-                tourDistance += edge->getWeight();
-                backtrack(nextVertex->getInfo(), tour, graph, minDistance, tourDistance ,minTour);
-                tour.pop_back();
-                nextVertex->setVisited(false);
-                tourDistance -= edge->getWeight();
+    }
+    for (const Edge* edge : currentVertex->getAdj()) {
+        Vertex* nextVertex = edge->getDest();
+        if (!nextVertex->isVisited()) {
+            if (tourDistance + edge->getWeight() >= minDistance) {
+                continue;
             }
+            tour.push_back(edge->getDest()->getInfo());
+            edge->getDest()->setVisited(true);
+            tourDistance += edge->getWeight();
+            backtrack(edge->getDest()->getInfo(), tour, graph, minDistance, tourDistance, minTour);
+            tour.pop_back();
+            edge->getDest()->setVisited(false);
+            tourDistance -= edge->getWeight();
         }
     }
 }
 
 
 
-void AuxFunctions::primMST() {
-    // Clear existing data
-    graphs.clear();
-    node_data.clear();
-    visited.clear();
-    parent.clear();
-    key.clear();
-
-    // Get the number of vertices
-    num_vertices = csvInfo::edgesGraph.getVertexSet().size();
-
-    // Initialize node_data with geographic coordinates of nodes
-    for (int i = 0; i < num_vertices; ++i) {
-        node_data.emplace_back(csvInfo::edgesGraph.getVertexSet()[i]->getLat(), csvInfo::edgesGraph.getVertexSet()[i]->getLon());
+void AuxFunctions::primMST(vector<string>& prim) {
+    vector<Vertex*> vertices = csvInfo::edgesGraph.getVertexSet();
+    int num_vertices = vertices.size(); // Number of vertices in the graph
+    if(num_vertices == 0){
+        return;
     }
 
-    // Initialize visited, parent, and key vectors
-    visited.resize(num_vertices, false);
-    parent.resize(num_vertices, -1);
-    key.resize(num_vertices, INT_MAX);
-
-    // Convert the edgesGraph from csvInfo to the adjacency matrix format used by TSP
-    std::map<std::string, int> vertex_to_index;
-    for (int i = 0; i < num_vertices; ++i) {
-        vertex_to_index[csvInfo::edgesGraph.getVertexSet()[i]->getInfo()] = i;
+    for (auto vert : csvInfo::edgesGraph.getVertexSet()) {
+        vert->setDist(std::numeric_limits<double>::infinity());
+        vert->setVisited(false);
+        vert->setPath(nullptr);
     }
 
-    for (const auto& vertex : csvInfo::edgesGraph.getVertexSet()) {
-        std::vector<string> row(num_vertices, to_string(INT_MAX));
-        for (const auto& edge : vertex->getAdj()) {
-            row[vertex_to_index[edge->getDest()->getInfo()]] = to_string(edge->getWeight());
-        }
-        graphs.push_back(row);
-    }
+    MutablePriorityQueue<Vertex> pq;
+
+    Vertex* startVertex = csvInfo::edgesGraph.findVertex("0");
+    startVertex->setDist(0);
+
+    pq.insert(startVertex);
 
 
-    bool hasEdges = false;
-    for (const auto& row : graphs) {
-        for (string weight : row) {
-            if (stoi(weight) != INT_MAX) {
-                hasEdges = true;
-                break;
-            }
-        }
-        if (hasEdges) break;
-    }
-    if (!hasEdges) return;
+    while (!pq.empty()) {
+        Vertex* u = pq.extractMin();
+        u->setVisited(true);
 
-    key[0] = 0;
+        prim.push_back(u->getInfo());
 
-    for (int count = 0; count < num_vertices - 1; count++) {
-        int u = minKey();
-        visited[u] = true;
-
-        for (int v = 0; v < num_vertices; v++) {
-            if (!visited[v] && AuxFunctions::findEdge(parent[v], v)) {
-                bool useHaversine = !(node_data[u].first == 0 && node_data[u].second == 0) && !(node_data[v].first == 0 && node_data[v].second == 0);
-                int edgeWeight = stoi(graphs[u][v]);
-                double distance = useHaversine && edgeWeight == INT_MAX ? haversine(node_data[u].first, node_data[u].second, node_data[v].first, node_data[v].second) : edgeWeight;
-                if (distance < key[v]) {
-                    parent[v] = u;
-                    key[v] = distance;
+        for (Edge* edge : u->getAdj()) {
+            Vertex* v = edge->getDest();
+            double weight = edge->getWeight();
+            auto dist = v->getDist(); //antes de mudar a dist de v
+            if (!v->isVisited() && weight < v->getDist()) {
+                v->setDist(weight);
+                v->setPath(edge);
+                if (dist == std::numeric_limits<double>::infinity()) {
+                    pq.insert(v);
+                }
+                else {
+                    pq.decreaseKey(v);
                 }
             }
         }
     }
-
-
-    std::fill(visited.begin(), visited.end(), false);
 }
 
 
-int AuxFunctions::minKey() {
-    int min = INT_MAX, min_index;
-
-    for (int v = 0; v < num_vertices; v++)
-        if (!visited[v] && key[v] < min)
-            min = key[v], min_index = v;
-
-    return min_index;
-}
-
-
-void AuxFunctions::dfs(int node, vector<int>& tour) {
-    visited[node] = true;
+void AuxFunctions::triangular(string node, vector<string>& tour, vector<string>& prim) {
+    Vertex* v = csvInfo::edgesGraph.findVertex(node);
+    v->setVisited(true);
     tour.push_back(node);
 
-    for (int i = 0; i < graphs[node].size(); ++i) {
-        if (!visited[i] && AuxFunctions::findEdge(node, i)) {
-            bool useHaversine = !(node_data[node].first == 0 && node_data[node].second == 0) && !(node_data[i].first == 0 && node_data[i].second == 0);
-            int edgeWeight = stoi(graphs[node][i]);
-            double distance = useHaversine && edgeWeight == INT_MAX ? haversine(node_data[node].first, node_data[node].second, node_data[i].first, node_data[i].second) : edgeWeight;
-            if (distance != INT_MAX) {
-                dfs(i, tour);
+    Vertex* previousVertex = nullptr;
+    Vertex* lastVertex = nullptr;
+    double totalDistance = 0;
+    for (auto nextNode : prim) {
+        Vertex* nextVertex = csvInfo::edgesGraph.findVertex(nextNode);
+        if(previousVertex != nullptr){
+            if (!nextVertex->isVisited()) {
+                double distance = haversine(v->getLat(), v->getLon(),nextVertex->getLat(), nextVertex->getLon());
+                totalDistance += distance;
+                if (totalDistance <= 2 * haversine(v->getLat(), v->getLon(),lastVertex->getLat(), lastVertex->getLon())) {
+                    tour.push_back(nextNode);
+                    nextVertex->setVisited(true);
+                    previousVertex = v;
+                    v = nextVertex;
+                    lastVertex = v;
+                } else {
+                    tour.push_back(prim.front()); //back to the starting node
+                    break;
+                }
             }
+        } else {
+            previousVertex = nextVertex;
+            tour.push_back(nextVertex->getInfo());
+            lastVertex = nextVertex;
         }
     }
 }
+
