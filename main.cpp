@@ -288,7 +288,7 @@ void datasetMenu(){
 /**
  * @brief Backtracking Algorithm
  *
- * Complexity: ???
+ * Complexity: O(n^3)
  */
 void solveTSPBacktracking() {
     //cout << "vertexSet size: " << graph.getVertexSet().size() << endl;
@@ -298,7 +298,13 @@ void solveTSPBacktracking() {
     vector<string> tour;
     vector<vector<string>> minTour;
     double min = INT_MAX;
-    AuxFunctions::backtrack(startNode, tour, csvInfo::edgesGraph, min, minTour);
+    double tourDistance = 0;
+    tour.push_back("0");
+    AuxFunctions::backtrack(startNode, tour, csvInfo::edgesGraph, min, tourDistance, minTour);
+
+    for (auto a : minTour){
+        a.push_back("0");
+    }
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
@@ -335,13 +341,13 @@ void tsp_2_approximation() {
     tour.clear();
 
     // Create a minimum spanning tree (MST) of the graph
-    TSP::primMST();
+    AuxFunctions::primMST();
 
     // Perform a depth-first search (DFS) on the MST to generate a tour
-    TSP::dfs(0, tour);
+    AuxFunctions::dfs(0, tour);
 
     // Return to the starting city to complete the tour
-    //tour.push_back(0);
+    tour.push_back(0);
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
@@ -363,40 +369,3 @@ void tsp_2_approximation() {
     }
     over = true;
 }
-
-/**
-void mainMenu() {
-    // ...
-    cout << "16 - (T2.2) Triangular Approximation Heuristic" << endl;
-    // ...
-
-    while (true) {
-        cout << "Write the number of what you want to do: ";
-        if (cin >> op) {
-            cout << endl;
-            switch (op) {
-                // ...
-                case 16:
-                    // Get the csvInfo and node_data from the user's selection
-                    csvInfo csv_info = csvInfo::createGraph(selected_option);
-                    std::vector<std::pair<double, double>> node_data = csvInfo::createNodes(selected_option);
-
-                    // Create a TSP object with the necessary parameters
-                    TSP tsp_object(csv_info, node_data);
-
-                    // Call the tsp_2_approximation function and store the result
-                    std::vector<int> tour = tsp_object.tsp_2_approximation();
-
-                    // Print the tour
-                    for (int city : tour) {
-                        std::cout << city << " ";
-                    }
-                    std::cout << std::endl;
-                    return;
-                    // ...
-            }
-        }
-        // ...
-    }
-}
-To add to the final menu*/

@@ -3,7 +3,7 @@
 #include "csvInfo.h"
 #include <iostream>
 
-static vector<std::vector<string>> graph; ///< Adjacency matrix of the graph.
+/*static vector<std::vector<string>> graph; ///< Adjacency matrix of the graph.
 vector<std::pair<float, float>> node_data; ///< Geographic coordinates of nodes.
 vector<bool> visited; ///< Tracks visited nodes during graph traversal.
 vector<int> parent; ///< Stores parent node of each node in the MST.
@@ -22,7 +22,7 @@ unsigned long num_vertices; ///< Number of vertices in the graph.
  * @param lon2
  * @return The great-circle distance between the two points in kilometers.
  */
-double haversine(double lat1, double lon1, double lat2, double lon2) {
+/*double haversine(double lat1, double lon1, double lat2, double lon2) {
 
     lat1 = lat1 * M_PI / 180.00;
     lon1 = lon1 * M_PI / 180.00;
@@ -96,10 +96,10 @@ void TSP::primMST() {
     for (int count = 0; count < num_vertices - 1; count++) {
         int u = minKey();
         visited[u] = true;
-
+        //findEdge comentado, só para não me dar problemas
         for (int v = 0; v < num_vertices; v++) {
-            if (!visited[v] && csvInfo::findEdge(parent[v], v) != NULL) {
-                bool useHaversine = !(node_data[u].first == 0 && node_data[u].second == 0) && !(node_data[v].first == 0 && node_data[v].second == 0);
+            if (!visited[v] /*&& csvInfo::findEdge(parent[v], v) != NULL*///) {
+                /*bool useHaversine = !(node_data[u].first == 0 && node_data[u].second == 0) && !(node_data[v].first == 0 && node_data[v].second == 0);
                 int edgeWeight = stoi(graph[u][v]);
                 double distance = useHaversine && edgeWeight == INT_MAX ? haversine(node_data[u].first, node_data[u].second, node_data[v].first, node_data[v].second) : edgeWeight;
                 if (distance < key[v]) {
@@ -109,7 +109,6 @@ void TSP::primMST() {
             }
         }
     }
-
 
     std::fill(visited.begin(), visited.end(), false);
 }
@@ -131,8 +130,8 @@ void TSP::dfs(int node, vector<int>& tour) {
     tour.push_back(node);
 
     for (int i = 0; i < graph[node].size(); ++i) {
-        if (!visited[i] && csvInfo::findEdge(node, i) != NULL) {
-            bool useHaversine = !(node_data[node].first == 0 && node_data[node].second == 0) && !(node_data[i].first == 0 && node_data[i].second == 0);
+        if (!visited[i] /*&& csvInfo::findEdge(node, i) != NULL*///) {
+            /*bool useHaversine = !(node_data[node].first == 0 && node_data[node].second == 0) && !(node_data[i].first == 0 && node_data[i].second == 0);
             int edgeWeight = stoi(graph[node][i]);
             double distance = useHaversine && edgeWeight == INT_MAX ? haversine(node_data[node].first, node_data[node].second, node_data[i].first, node_data[i].second) : edgeWeight;
             if (distance != INT_MAX) {
@@ -140,7 +139,7 @@ void TSP::dfs(int node, vector<int>& tour) {
             }
         }
     }
-}
+}*/
 
 
 

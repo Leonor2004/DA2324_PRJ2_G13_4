@@ -70,8 +70,8 @@ void csvInfo::createGraph(int graph) {
             }
 
         }
-        //edgesGraph.addEdge(origem, destino, stod(distancia));
-        edgesGraph.addBidirectionalEdge(origem, destino, stod(distancia));
+        if(graph < 4){edgesGraph.addBidirectionalEdge(origem, destino, stod(distancia));}
+        else {edgesGraph.addEdge(origem, destino, stod(distancia));}
     }
     file.close();
 }
@@ -102,7 +102,6 @@ void csvInfo::createNodes(int graph) {
 
         double convertedLat = std::stod(latitude);
         double convertedLon = std::stod(longitude);
-        //cout << "Longitude: " << longitude << "Latitude: " << latitude << endl;
 
         bool prov = edgesGraph.addVertex(node,aux, convertedLon,convertedLat);
         if(prov) {
@@ -115,18 +114,3 @@ void csvInfo::createNodes(int graph) {
 }
 
 
-bool csvInfo::findEdge(int node1, int node2) {
-    // Iterate over the adjacency list of node1
-    for (auto vertex : edgesGraph.getVertexSet()) {
-        if(vertex->getInfo() == std::to_string(node1)) {
-            for (auto edge: vertex->getAdj()) {
-                // If an edge exists between node1 and node2, return true
-                if (edge->getDest()->getInfo() == std::to_string(node2)) {
-                    return true;
-                }
-            }
-        }
-    }
-    // If no edge exists between node1 and node2, return false
-    return false;
-}

@@ -31,7 +31,7 @@ public:
      *
      * Complexity: O(n^2)
      */
-    static void primMST();
+    //static void primMST();
 
     /**
      * @brief This method returns the node with the minimum key value that hasn't been visited yet.
@@ -40,7 +40,7 @@ public:
      *
      * @return The index of the node with the minimum key value.
      */
-    static int minKey();
+    //static int minKey();
 
     /**
      * @brief This method performs a depth-first search (DFS) on the MST.
@@ -62,7 +62,7 @@ public:
 
 
 
-    static void dfs(int node, vector<int> &tour);
+    //static void dfs(int node, vector<int> &tour);
 };
 
 #endif //DA2324_PRJ2_G13_4_TSP_H
