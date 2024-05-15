@@ -14,4 +14,4 @@ add_executable(DA2324_PRJ2_G13_4
         Graph.cpp
         Graph.h
         MutablePriorityQueue.h
-        tsp_otherheuristic.cpp)
+)

@@ -77,7 +77,7 @@ public:
     static void triangular(string node, vector<string> &tour, vector<string> &prim);
 
 
-    
+
     /**
      * @brief Executes an alternative heuristic for the TSP problem using the nearest neighbor approach.
      *
