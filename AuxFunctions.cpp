@@ -1,6 +1,7 @@
 #include "AuxFunctions.h"
 #include "MutablePriorityQueue.h"
 #include <cmath>
+#include <string>
 
 //static vector<vector<string>> graphs; ///< Adjacency matrix of the graph.
 //vector<pair<float, float>> node_data; ///< Geographic coordinates of nodes.
@@ -212,3 +213,51 @@ void AuxFunctions::triangular(string node, vector<string>& tour, vector<string>&
 
 }
 
+
+
+
+
+void AuxFunctions::other_heuristic(string current, vector<string> &tour, Graph &graph, double &minDistance, int tourDistance,
+                                   vector<string> &minTour){
+
+    //Vertex* currentVertex = graph.findVertex(current);
+
+
+    //graph.findVertex(current)->setVisited(true);
+    minTour.push_back(current);
+
+    while(minTour.size() < graph.getVertexSet().size()){
+        graph.findVertex(current)->setVisited(true);
+        current=nearest_neighbor(current, graph);
+        minTour.push_back(current);
+    }
+
+    minTour.push_back("0");
+
+    minDistance = calculateTourDistance(minTour, graph);
+
+    for (auto a : minTour){
+        cout << a << " ";
+    } cout << endl;
+
+    cout << "Distancia: " << minDistance << endl;
+
+}
+
+
+string AuxFunctions::nearest_neighbor(string current, Graph &graph){
+    string nearest = "-1";
+    double min_distance=std::numeric_limits<double>::infinity();
+
+    Vertex* currentVertex = graph.findVertex(current);
+    if (currentVertex != nullptr) {
+        for (auto edge : currentVertex->getAdj()){
+            if(!edge->getDest()->isVisited() && edge->getWeight() < min_distance){
+                nearest = edge->getDest()->getInfo();
+                min_distance= edge->getWeight();
+            }
+        }
+    }
+
+    return nearest;
+}

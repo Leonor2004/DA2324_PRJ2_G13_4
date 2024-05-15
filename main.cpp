@@ -32,6 +32,7 @@ void datasetMenu();
 //void algo();
 void solveTSPBacktracking();
 void tsp_2_approximation();
+void tsp_otherheuristic();
 
 /**
  * @brief Clears all the menus
@@ -52,7 +53,7 @@ void clearMenus() {
  *
  * @return Program exit status.
  */
-int main() {
+int main(){
     //load csv
     menus.emplace("dataset");
 
@@ -116,6 +117,7 @@ int main() {
     return 0;
 }
 
+
 /**
  * @brief Main Menu
  *
@@ -178,6 +180,7 @@ void mainMenu() {
         }
     }
 }
+
 
 /**
  * @brief Dataset Menu
@@ -317,6 +320,7 @@ void datasetMenu(){
     }
 }
 
+
 //para testar (apagar no final)
 /*void algo(){
     cout << "entrei no algo";
@@ -427,4 +431,61 @@ void tsp_2_approximation() {
     cout << "Distance: " << min << endl;
 
     over = true;
+}
+
+
+
+/**
+ * @brief Executes the nearest neighbor heuristic for the TSP problem.
+ *
+ * This function implements the nearest neighbor heuristic for solving the
+ * Travelling Salesman Problem (TSP). It starts from a given node, then
+ * iteratively selects the nearest unvisited node as the next node to visit.
+ * The process is repeated until all nodes have been visited, and the tour
+ * is complete.
+ *
+ * Complexity: O(n^2)
+ *
+ */
+void tsp_otherheuristic() {
+
+    //SETTING INITIAL CONDITIONS
+    cout << "vertexSet size: " << csvInfo::edgesGraph.getVertexSet().size() << endl;
+    auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
+    string startNode = "0";
+
+    for (auto a : csvInfo::edgesGraph.getVertexSet()){
+        a->setVisited(false);
+    }
+
+    std::vector<string> tour; ///< Stores nodes in the order they are visited in the tour.
+    std::vector<string> minTour;
+    double min = INT_MAX;
+
+
+    // Clear the tour vector
+
+    AuxFunctions::other_heuristic(startNode, tour, csvInfo::edgesGraph, min, 0, minTour);
+
+
+
+
+    auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    duration -= minutes;
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    duration -= seconds;
+    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+    duration -= milliseconds;
+
+    cout << endl;
+    std::cout << "Time taken by Nearest Neighbor Heuristic: "
+              << minutes.count() << " minutes "
+              << seconds.count() << " seconds "
+              << duration.count() << " milliseconds "
+              << duration.count() << " microseconds" << endl;
+    cout << endl;
+
+
 }
