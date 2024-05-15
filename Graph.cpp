@@ -147,6 +147,14 @@ void Edge::setReverse(Edge* reverse) {
     this->flow = flow;
 }*/
 
+bool Edge::isTest() const{
+    return this->teste;
+}
+
+void Edge::setTest(bool test){
+    this->teste = test;
+}
+
 /********************** Graph  ****************************/
 
 std::vector<Vertex*> Graph::getVertexSet() const {

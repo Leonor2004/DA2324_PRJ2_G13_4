@@ -18,7 +18,7 @@
 
 
 
-map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}, {"triangular", 3}, {"otherTSP", 4},};
+map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}, {"triangular", 3}, {"otherTSP", 4},{"test", 5}};
 stack<string> menus;
 bool over = false;
 bool quit = false;
@@ -29,10 +29,11 @@ void clearMenus();
 int main();
 void mainMenu();
 void datasetMenu();
-//void algo();
+
 void solveTSPBacktracking();
 void tsp_2_approximation();
 void tsp_otherheuristic();
+void teste();
 
 /**
  * @brief Clears all the menus
@@ -74,10 +75,10 @@ int main(){
                 tsp_2_approximation();
                 break;
             case 4:
-                //topico 5
+                tsp_otherheuristic();
                 break;
             case 5:
-                //topico 4
+                teste();
                 break;
             default:
                 quit = true;
@@ -86,6 +87,7 @@ int main(){
             int op = 0;
             cout << endl;
             cout << "1 - Return to Main Menu" << endl;
+            cout << "2 - Change dataset" << endl;
             cout << "0 - Exit." << endl;
             while (true) {
                 cout << "Write the number of what you want to do: ";
@@ -93,6 +95,12 @@ int main(){
                     if (op == 1) {
                         clearMenus();
                         menus.emplace("main");
+                        break;
+                    }
+                    else if (op == 2) {
+                        clearMenus();
+                        csvInfo::edgesGraph = Graph();
+                        menus.emplace("dataset");
                         break;
                     }
                     else if (op == 0) {
@@ -135,8 +143,9 @@ void mainMenu() {
         cout << "1 - T2.1 - Backtracking Algorithm." << endl;
     }
     cout << "2 - T2.2 - Triangular Approximation Heuristic." << endl;
-    cout << "3" << endl;
-    cout << "4 - Change dataset" << endl;
+    cout << "3 - Other Heuristic - Nearest Neighbor " << endl;
+    cout << "4 - Change dataset." << endl;
+    cout << "5 - Print nº of vertex and nº edges." << endl;
     cout << "0 - Quit." << endl;
     cout << endl;
     cout << "Note: If you enter a 'q' when asked for an input," << endl;
@@ -160,17 +169,20 @@ void mainMenu() {
                     menus.emplace("triangular");
                     return;
                 case 3 :
-                    //menu3
+                    menus.emplace("otherTSP");
                     return;
                 case 4 :
                     csvInfo::edgesGraph = Graph();
                     menus.emplace("dataset");
                     return;
+                case 5 :
+                    menus.emplace("test");
+                    return;
                 case 0:
                     quit = true;
                     return;
                 default:
-                    cout << "Invalid number! The number should be between 0 and 4." << endl;
+                    cout << "Invalid number! The number should be between 0 and 5." << endl;
             }
         }
         else {
@@ -207,6 +219,9 @@ void datasetMenu(){
     cout << "13 - Fully Connected - 700 edges" << endl;
     cout << "14 - Fully Connected - 800 edges" << endl;
     cout << "15 - Fully Connected - 900 edges" << endl;
+    cout << "16 - Real-world Graphs - Graph 1" << endl;
+    cout << "17 - Real-world Graphs - Graph 2" << endl;
+    cout << "18 - Real-world Graphs - Graph 3" << endl;
     cout << "0 - Quit." << endl;
     cout << endl;
     cout << "Note: If you enter a 'q' when asked for an input," << endl;
@@ -305,11 +320,29 @@ void datasetMenu(){
                     graphN = 900;
                     menus.emplace("main");
                     return;
+                case 16 :
+                    csvInfo::createNodes(1000);
+                    csvInfo::createGraph(1000);
+                    graphN = 1000;
+                    menus.emplace("main");
+                    return;
+                case 17 :
+                    csvInfo::createNodes(5000);
+                    csvInfo::createGraph(5000);
+                    graphN = 5000;
+                    menus.emplace("main");
+                    return;
+                case 18 :
+                    csvInfo::createNodes(10000);
+                    csvInfo::createGraph(10000);
+                    graphN = 10000;
+                    menus.emplace("main");
+                    return;
                 case 0:
                     quit = true;
                     return;
                 default:
-                    cout << "Invalid number! The number should be between 0 and 7." << endl;
+                    cout << "Invalid number! The number should be between 0 and 15." << endl;
             }
         }
         else {
@@ -322,11 +355,26 @@ void datasetMenu(){
 
 
 //para testar (apagar no final)
-/*void algo(){
-    cout << "entrei no algo";
-    AuxFunctions::test();
+void teste(){
+    int number = 0;
+    for (auto v : csvInfo::edgesGraph.getVertexSet()) {
+        for (auto e : v->getAdj()) {
+            e->setTest(false);
+        }
+    }
+    for (auto v : csvInfo::edgesGraph.getVertexSet()) {
+        for (auto e : v->getAdj()) {
+            if (!e->isTest()) {
+                number++;
+                e->setTest(true);
+            }
+        }
+    }
+
+    std::cout << "Number of nodes: " << csvInfo::edgesGraph.getVertexSet().size() << "\n";
+    std::cout << "Number of edges: " << number << "\n";
     over = true;
-}*/
+}
 
 
 /**
@@ -335,8 +383,7 @@ void datasetMenu(){
  * Complexity: O(n^3)
  */
 void solveTSPBacktracking() {
-
-    cout << "vertexSet size: " << csvInfo::edgesGraph.getVertexSet().size() << endl;
+    //cout << "vertexSet size: " << csvInfo::edgesGraph.getVertexSet().size() << endl;
     auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
     string startNode = "0";
 
@@ -352,6 +399,12 @@ void solveTSPBacktracking() {
 
     AuxFunctions::backtrack(startNode, tour, csvInfo::edgesGraph, min, tourDistance, minTour);
 
+    cout << "Minimum Tour using Backtracking algorithm:" << endl;
+    for (auto a : minTour) {
+        cout << a << " ";
+
+    } cout << endl;
+    cout << "Distance: " << min << endl;
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
@@ -366,15 +419,10 @@ void solveTSPBacktracking() {
     std::cout << "Time taken by Backtracking: "
             << minutes.count() << " minutes "
             << seconds.count() << " seconds "
-            << duration.count() << " milliseconds "
+            << milliseconds.count() << " milliseconds "
             << duration.count() << " microseconds" << endl;
     cout << endl;
-    cout << "Minimum Tour using Backtracking algorithm:" << endl;
-    for (auto a : minTour) {
-        cout << a << " ";
 
-    } cout << endl;
-    cout << "Distance: " << min << endl;
     over = true;
 }
 
@@ -384,7 +432,7 @@ void tsp_2_approximation() {
 
     auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
 
-    std::vector<string> tour; ///< Stores nodes in the order they are visited in the tour.
+    std::vector<string> tour; // Stores nodes in the order they are visited in the tour.
     // Clear the tour vector
 
 
@@ -396,11 +444,23 @@ void tsp_2_approximation() {
     for (auto a : prim){
         Vertex* v = csvInfo::edgesGraph.findVertex(a);
         v->setVisited(false);
-        cout << csvInfo::edgesGraph.findVertex(a)->isVisited();
     }
 
     tour.clear();
     AuxFunctions::triangular("0", tour, prim);
+
+
+    double min = AuxFunctions::calculateTourDistance(tour, csvInfo::edgesGraph, graphN);
+
+    cout << "Minimum Tour using Triangular Approximation Heuristic algorithm:" << endl;
+    for (auto a : tour) {
+        if (!a.empty()) {
+            cout << a << " ";
+        } else {
+            cout << "No tour found!" << endl;
+        }
+    } cout << endl;
+    cout << "Distance: " << min << endl;
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
@@ -415,20 +475,9 @@ void tsp_2_approximation() {
     std::cout << "Time taken by Triangular Approximation Heuristic: "
               << minutes.count() << " minutes "
               << seconds.count() << " seconds "
-              << duration.count() << " milliseconds "
+              << milliseconds.count() << " milliseconds "
               << duration.count() << " microseconds" << endl;
     cout << endl;
-
-    double min = AuxFunctions::calculateTourDistance(tour, csvInfo::edgesGraph);
-
-    for (auto a : tour) {
-        if (!a.empty()) {
-            cout << a << " ";
-        } else {
-            cout << "No tour found!" << endl;
-        }
-    } cout << endl;
-    cout << "Distance: " << min << endl;
 
     over = true;
 }
@@ -458,16 +507,12 @@ void tsp_otherheuristic() {
         a->setVisited(false);
     }
 
-    std::vector<string> tour; ///< Stores nodes in the order they are visited in the tour.
+    std::vector<string> tour; // Stores nodes in the order they are visited in the tour.
     std::vector<string> minTour;
     double min = INT_MAX;
 
 
-    // Clear the tour vector
-
-    AuxFunctions::other_heuristic(startNode, tour, csvInfo::edgesGraph, min, 0, minTour);
-
-
+    AuxFunctions::other_heuristic(startNode, tour, csvInfo::edgesGraph, min, 0, minTour, graphN);
 
 
     auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
@@ -480,12 +525,11 @@ void tsp_otherheuristic() {
     duration -= milliseconds;
 
     cout << endl;
-    std::cout << "Time taken by Nearest Neighbor Heuristic: "
+    std::cout << "Time taken by Nearest Neighbor Heuristic algorithm: "
               << minutes.count() << " minutes "
               << seconds.count() << " seconds "
-              << duration.count() << " milliseconds "
+              << milliseconds.count() << " milliseconds "
               << duration.count() << " microseconds" << endl;
     cout << endl;
-
-
+    over = true;
 }

@@ -304,10 +304,27 @@ public:
      */
     //void setFlow(double flow);
 
+    /**
+     * @brief Check if is visited
+     *
+     * Complexity: O(1)
+     *
+     * @return True or false
+     */
+    bool isTest() const;
+    /**
+     * @brief Set visited
+     *
+     * Complexity: O(1)
+     *
+     * @param visited : True or false
+     */
+    void setTest(bool test);
 
 protected:
     Vertex * dest; // destination vertex
     double weight; // edge weight
+    bool teste = false;
     //double capacity; // edge capacity, don't change
 
     // used for bidirectional edges

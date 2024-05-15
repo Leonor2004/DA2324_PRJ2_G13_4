@@ -3,24 +3,9 @@
 #include <cmath>
 #include <string>
 
-//static vector<vector<string>> graphs; ///< Adjacency matrix of the graph.
-//vector<pair<float, float>> node_data; ///< Geographic coordinates of nodes.
-//vector<bool> visited; ///< Tracks visited nodes during graph traversal. // não é preciso
-//vector<int> parent; ///< Stores parent node of each node in the MST.
-//vector<int> key; ///< Stores minimum key values of nodes.
-//unsigned long num_vertices; ///< Number of vertices in the graph.
 
 AuxFunctions::AuxFunctions() = default;
 
-/*void AuxFunctions::test() {
-    for (auto a : csvInfo::edgesGraph.getVertexSet()){
-        cout << a->getInfo() << " - " << a->getLon() << " - " << a->getLat()<< endl;
-        for(auto b : a->getAdj()) {
-            cout << "Origem: " << b->getOrig()->getInfo() << "- Destino: " << b->getDest()->getInfo() << " - Weight: "
-                 << b->getWeight() << endl;
-        }
-    }
-}*/
 
 /**
  * @brief Calculates the great-circle distance between two points on a sphere given their longitudes and latitudes.
@@ -70,7 +55,7 @@ bool AuxFunctions::findEdge(int node1, int node2) {
     return false;
 }
 
-double AuxFunctions::calculateTourDistance(const vector<string>& tour, const Graph& graph) {
+double AuxFunctions::calculateTourDistance(const vector<string>& tour, const Graph& graph, int graphN) {
     double distance = 0.0;
     for (size_t i = 0; i < tour.size() - 1; ++i) {
         const string& source = tour[i];
@@ -78,6 +63,8 @@ double AuxFunctions::calculateTourDistance(const vector<string>& tour, const Gra
         Edge* edge = graph.getEdge(source, destination);
         if (edge) {
             distance += edge->getWeight();
+        } else if(graphN > 24){
+            distance += haversine(graph.findVertex(source)->getLat(), graph.findVertex(source)->getLon(), graph.findVertex(destination)->getLat(), graph.findVertex(destination)->getLon());
         }
     }
     return distance;
@@ -91,9 +78,6 @@ void AuxFunctions::backtrack(string current, vector<string>& tour, Graph& graph,
         if (tourDistance < minDistance) {
             minDistance = tourDistance;
             minTour = tour;
-            for (auto a : tour){
-                cout << a << " ";
-            } cout << endl;
         }
         return;
     }
@@ -214,34 +198,62 @@ void AuxFunctions::triangular(string node, vector<string>& tour, vector<string>&
 }
 
 
-
+std::string AuxFunctions::find_any_unvisited(const Graph &graph) {
+    for (const auto &vertex : graph.getVertexSet()) {
+        if (!vertex->isVisited()) {
+            return vertex->getInfo();
+        }
+    }
+    return "-1";
+}
 
 
 void AuxFunctions::other_heuristic(string current, vector<string> &tour, Graph &graph, double &minDistance, int tourDistance,
-                                   vector<string> &minTour){
+                                   vector<string> &minTour, int graphN){
 
     //Vertex* currentVertex = graph.findVertex(current);
-
-
     //graph.findVertex(current)->setVisited(true);
     minTour.push_back(current);
 
     while(minTour.size() < graph.getVertexSet().size()){
+        Vertex* currentVertex = graph.findVertex(current);
+        if (currentVertex == nullptr) {
+            std::cerr << "Error: Vertex " << current << " not found in the graph." << std::endl;
+            return;
+        }
+
         graph.findVertex(current)->setVisited(true);
-        current=nearest_neighbor(current, graph);
+
+        std::string nextVertex = nearest_neighbor(current, graph);
+
+        if (nextVertex == "-1") {
+            nextVertex = find_any_unvisited(graph);
+            if (nextVertex == "-1" || (graphN >24 && stoi(nextVertex) >= graphN)) {
+                cout << "Error: No unvisited neighbors found. Exiting." << std::endl;
+                break;
+            }
+        }
+        current = nextVertex;
         minTour.push_back(current);
     }
 
-    minTour.push_back("0");
+    if ((minTour.size()+1 == graph.getVertexSet().size() && graphN >24) || (minTour.size() == graph.getVertexSet().size())) {
+        minTour.push_back(minTour.front());
+    }
 
-    minDistance = calculateTourDistance(minTour, graph);
-
+    minDistance = calculateTourDistance(minTour, graph , graphN);
+    cout << "Minimum Tour using Nearest Neighbor algorithm:" << endl;
+    int c = 0;
     for (auto a : minTour){
         cout << a << " ";
+        c++;
+        if (c>19){
+            cout << endl;
+            c = 0;
+        }
     } cout << endl;
 
     cout << "Distancia: " << minDistance << endl;
-
 }
 
 
@@ -250,14 +262,22 @@ string AuxFunctions::nearest_neighbor(string current, Graph &graph){
     double min_distance=std::numeric_limits<double>::infinity();
 
     Vertex* currentVertex = graph.findVertex(current);
-    if (currentVertex != nullptr) {
+
+    if (currentVertex == nullptr) {
+        std::cerr << "Error: Vertex " << current << " not found in the graph." << std::endl;
+        return nearest;
+    } else {
         for (auto edge : currentVertex->getAdj()){
+            if (edge->getDest() == nullptr) {
+                std::cerr << "Error: Destination vertex in edge is null." << std::endl;
+                continue;
+
+            }
             if(!edge->getDest()->isVisited() && edge->getWeight() < min_distance){
                 nearest = edge->getDest()->getInfo();
                 min_distance= edge->getWeight();
             }
         }
     }
-
     return nearest;
 }

@@ -35,6 +35,9 @@ void csvInfo::createGraph(int graph) {
     else if(graph == 700){file.open("../Datasets/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_700.csv");}
     else if(graph == 800){file.open("../Datasets/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_800.csv");}
     else if(graph == 900){file.open("../Datasets/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_900.csv");}
+    else if(graph == 1000){file.open("../Datasets/Real-world Graphs/Real-world Graphs/graph1/edges.csv");}
+    else if(graph == 5000){file.open("../Datasets/Real-world Graphs/Real-world Graphs/graph2/edges.csv");}
+    else if(graph == 10000){file.open("../Datasets/Real-world Graphs/Real-world Graphs/graph3/edges.csv");}
 
     if (!file.is_open()) {
         cerr << "Error: Unable to open the file." << endl;
@@ -47,7 +50,7 @@ void csvInfo::createGraph(int graph) {
     string distancia;
     int aux = 1;
 
-    if(graph < 4){getline(file, line);}    // discard header line
+    if(graph < 4 || graph > 950){getline(file, line);}    // discard header line
     while(getline(file, line)) {
         stringstream s(line);
         getline(s, origem, ',');
@@ -71,8 +74,6 @@ void csvInfo::createGraph(int graph) {
 
         }
         if(graph < 4){
-            //edgesGraph.addBidirectionalEdge(origem, destino, stod(distancia));
-
             edgesGraph.addEdge(origem, destino, stod(distancia));
             edgesGraph.addEdge(destino, origem, stod(distancia));
         } else {edgesGraph.addEdge(origem, destino, stod(distancia));}
@@ -84,7 +85,12 @@ void csvInfo::createNodes(int graph) {
     vertexSet.clear();
     vertexVector.clear();
     fstream file;
-    file.open("../Datasets/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/nodes.csv");
+    if (graph < 1000){
+        file.open("../Datasets/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/nodes.csv");
+    } else if(graph == 1000){file.open("../Datasets/Real-world Graphs/Real-world Graphs/graph1/nodes.csv");}
+    else if(graph == 5000){file.open("../Datasets/Real-world Graphs/Real-world Graphs/graph2/nodes.csv");}
+    else if(graph == 10000){file.open("../Datasets/Real-world Graphs/Real-world Graphs/graph3/nodes.csv");}
+
     if (!file.is_open()) {
         cerr << "Error: Unable to open the nodes file." << endl;
         return;
@@ -101,8 +107,6 @@ void csvInfo::createNodes(int graph) {
         getline(s, node, ',');
         getline(s, longitude, ',');
         getline(s, latitude);
-        std::cout << "lat: " << latitude << std::endl;
-        std::cout << "lon: " << longitude << std::endl;
 
         double convertedLat = std::stod(latitude);
         double convertedLon = std::stod(longitude);

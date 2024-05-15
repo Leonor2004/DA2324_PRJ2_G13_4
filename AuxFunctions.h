@@ -17,8 +17,6 @@ public:
      */
     AuxFunctions();
 
-    //static void test();
-
     /**
      * @brief Find an edge in the edges graph
      *
@@ -38,9 +36,10 @@ public:
      *
      * @param tour : Tour
      * @param graph : Graph
+     * @param ???
      * @return Tour distance
      */
-    static double calculateTourDistance(const vector<string> &tour, const Graph &graph);
+    static double calculateTourDistance(const vector<string> &tour, const Graph &graph, int graphN);
 
     //topico 1
     /**
@@ -95,7 +94,7 @@ public:
      * Complexity: O(n^2)
      */
     static void other_heuristic(string current, vector<string> &tour, Graph &graph, double &minDistance, int tourDistance,
-                                vector<string> &minTour);
+                                vector<string> &minTour, int graphN);
 
 
 
@@ -113,5 +112,7 @@ public:
      * Complexity: O(n)
      */
     static string nearest_neighbor(string current, Graph &graph);
+
+    static string find_any_unvisited(const Graph &graph);
 };
 #endif //DA2324_PRJ2_G13_4_AUXFUNCTIONS_H
