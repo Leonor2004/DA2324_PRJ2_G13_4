@@ -6,20 +6,19 @@ csvInfo::csvInfo() = default;
 
 Graph csvInfo::edgesGraph;
 vector<Vertex> csvInfo::vertexVector;
-std::set<std::string> csvInfo::vertexSet;
+set<string> csvInfo::vertexSet;
 
 void csvInfo::createGraph(int graph) {
-
     fstream file;
-    if(graph == 1){
+    if(graph == 13){
         file.open("../Datasets/Toy-Graphs/Toy-Graphs/shipping.csv");
         vertexSet.clear();
         vertexVector.clear();
-    } else if(graph == 2){
+    } else if(graph == 10){
         file.open("../Datasets/Toy-Graphs/Toy-Graphs/stadiums.csv");
         vertexSet.clear();
         vertexVector.clear();
-    } else if(graph == 3){
+    } else if(graph == 4){
         file.open("../Datasets/Toy-Graphs/Toy-Graphs/tourism.csv");
         vertexSet.clear();
         vertexVector.clear();
@@ -50,7 +49,7 @@ void csvInfo::createGraph(int graph) {
     string distancia;
     int aux = 1;
 
-    if(graph < 4 || graph > 950){getline(file, line);}    // discard header line
+    if(graph < 24 || graph > 950){getline(file, line);} // discard header line
     while(getline(file, line)) {
         stringstream s(line);
         getline(s, origem, ',');
@@ -58,7 +57,7 @@ void csvInfo::createGraph(int graph) {
         getline(s, distancia);
 
         bool prov = false;
-        if(graph < 4) {
+        if(graph < 24) {
             prov = edgesGraph.addVertex(origem, aux - 1, 0, 0);
             if (prov) {
                 vertexSet.insert(origem);
@@ -73,7 +72,7 @@ void csvInfo::createGraph(int graph) {
             }
 
         }
-        if(graph < 4){
+        if(graph < 24){
             edgesGraph.addEdge(origem, destino, stod(distancia));
             edgesGraph.addEdge(destino, origem, stod(distancia));
         } else {edgesGraph.addEdge(origem, destino, stod(distancia));}
@@ -101,20 +100,20 @@ void csvInfo::createNodes(int graph) {
     string longitude;
     string latitude;
     int aux = 0;
-    getline(file, line);
+    getline(file, line); // discard header line
     while(getline(file, line) && aux-1<graph) {
         stringstream s(line);
         getline(s, node, ',');
         getline(s, longitude, ',');
         getline(s, latitude);
 
-        double convertedLat = std::stod(latitude);
-        double convertedLon = std::stod(longitude);
+        double convertedLat = stod(latitude);
+        double convertedLon = stod(longitude);
 
         bool prov = edgesGraph.addVertex(node,aux, convertedLon,convertedLat);
         if(prov) {
             vertexSet.insert(node);
-            vertexVector.push_back(Vertex(node, aux - 1, 0, 0));
+            vertexVector.push_back(Vertex(node, aux - 1, convertedLon, convertedLat));
             aux++;
         }
     }

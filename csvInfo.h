@@ -14,6 +14,7 @@
 class csvInfo {
 private:
 public:
+
     /**
      * @brief Default constructor
      */
@@ -32,7 +33,7 @@ public:
     /**
      * Vertex Set
      */
-    static std::set<std::string> vertexSet;
+    static set<string> vertexSet;
 
     /**
      * @brief Creation of the graph
@@ -44,7 +45,7 @@ public:
     static void createGraph(int graph);
 
     /**
-     * @brief Longitude and latitude of Extra Fully Connected Graphs
+     * @brief Longitude and latitude of Extra Fully Connected Graphs and Real World Graph
      *
      * Complexity: O(n^2)
      *

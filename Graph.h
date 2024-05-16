@@ -13,7 +13,7 @@ using namespace std;
 
 class Edge;
 
-#define INF std::numeric_limits<double>::max()
+#define INF numeric_limits<double>::max()
 
 /**
  * @brief Represents a Vertex in the graph.
@@ -59,7 +59,7 @@ public:
      *
      * @return Adjacent edges
      */
-    std::vector<Edge *> getAdj() const;
+    vector<Edge *> getAdj() const;
 
     /**
      * @brief Get distancia
@@ -95,16 +95,7 @@ public:
      *
      * @return Incoming edges
      */
-    std::vector<Edge *> getIncoming() const;
-
-    /**
-     * @brief Get the value of the position in the vector
-     *
-     * Complexity:  O(1)
-     *
-     * @return Position
-     */
-    int getPos();
+    vector<Edge *> getIncoming() const;
 
     /**
      * @brief Set distancia
@@ -185,8 +176,8 @@ protected:
     string info;                    // info node
     double longitude;
     double latitude;
-    std::vector<Edge *> adj;        // outgoing edges
-    std::vector<Edge *> incoming;   // incoming edges
+    vector<Edge *> adj;        // outgoing edges
+    vector<Edge *> incoming;   // incoming edges
     int vectorPos;                  // position in the vector
 
     // auxiliary fields
@@ -390,7 +381,7 @@ public:
     /**
      * @brief Get edge between source and destination
      *
-     * Complexity: 0(n)
+     * Complexity: 0(n^2)
      *
      * @param source : Source
      * @param destination : Destination
@@ -417,10 +408,10 @@ public:
      *
      * @return vertexSet
      */
-    std::vector<Vertex *> getVertexSet() const;
+    vector<Vertex *> getVertexSet() const;
 
 protected:
-    std::vector<Vertex *> vertexSet;
+    vector<Vertex *> vertexSet;
     double ** distMatrix = nullptr;
     int **pathMatrix = nullptr;
 };

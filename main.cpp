@@ -5,9 +5,20 @@
  * @section intro_sec Introduction
  * This project was made in the context of the Algorithm Design class.
  *
- * INTROOO
+ * The goal of this assignment is twofold. First, implement a basic exhaustive approach for the
+ * classic routing problem using the TSP abstraction, therefore learning first-hand that although
+ * such an approach can find optimal solutions, its applicability is restricted to very small graphs.
+ * Second, refine your critical thinking skills, by developing and analysing a set of approximate
+ * solutions to the TSP.
  *
- * This project was made by: Frederica Pereira (up202108167) and  Leonor Couto (up202205796).
+ * This project designs efficient algorithms to find optimal routes for vehicles in generic shipping and
+ * delivery scenarios, from urban deliveries to ocean shipping. This problem corresponds to the TSP.
+ * As the TSP is intractable, there are no known efficient algorithms to solve it.
+ * Backtracking techniques can find the optimal solution to this problem.
+ * If the graph is small, the application of these approaches might be reasonable.
+ * However their application to large graphs is infeasible, due to their high computational complexity.
+ *
+ * This project was made by: Frederica Pereira (up202108167), Leonor Couto (up202205796) and Tomás Rodrigues (up202205749).
  */
 
 #include <map>
@@ -18,7 +29,7 @@
 
 
 
-map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}, {"triangular", 3}, {"otherTSP", 4},{"test", 5}};
+map<string, int> m = {{"dataset", 0}, {"main", 1},{"backtracking", 2}, {"triangular", 3}, {"otherTSP", 4},{"realWorld", 5},{"test", 6}};
 stack<string> menus;
 bool over = false;
 bool quit = false;
@@ -33,6 +44,7 @@ void datasetMenu();
 void solveTSPBacktracking();
 void tsp_2_approximation();
 void tsp_otherheuristic();
+void tsp_otherheuristicForRealWorld();
 void teste();
 
 /**
@@ -46,7 +58,6 @@ void clearMenus() {
     }
 }
 
-
 /**
  * @brief Main function to initialize data and run the program.
  *
@@ -55,10 +66,8 @@ void clearMenus() {
  * @return Program exit status.
  */
 int main(){
-    //load csv
     menus.emplace("dataset");
 
-    //menus.emplace("main");
     while (true) {
         string next = menus.top();
         switch (m.at(next)) {
@@ -78,6 +87,9 @@ int main(){
                 tsp_otherheuristic();
                 break;
             case 5:
+                tsp_otherheuristicForRealWorld();
+                break;
+            case 6:
                 teste();
                 break;
             default:
@@ -108,7 +120,7 @@ int main(){
                         break;
                     }
                     else {
-                        cout << "Invalid number! The number should be 0 or 1." << endl;
+                        cout << "Invalid number! The number should be 0, 1 or 2." << endl;
                     }
                 }
                 else {
@@ -135,17 +147,18 @@ void mainMenu() {
 
     int op = 0;
     cout << endl << "----------------------------" << endl;
-    cout << endl << "      Main Menu   " << endl;
+    cout << endl << "         Main Menu          " << endl;
     cout << endl << "----------------------------" << endl;
-    if(graphN > 5){
-        cout << "Backtracking Algorithm not possible for bigger graphs." << endl;
+    if(graphN > 14){
+        cout << "T2.1 - Backtracking Algorithm not possible for bigger graphs." << endl;
     } else {
         cout << "1 - T2.1 - Backtracking Algorithm." << endl;
     }
     cout << "2 - T2.2 - Triangular Approximation Heuristic." << endl;
-    cout << "3 - Other Heuristic - Nearest Neighbor " << endl;
-    cout << "4 - Change dataset." << endl;
-    cout << "5 - Print nº of vertex and nº edges." << endl;
+    cout << "3 - T2.3 - Other Heuristic - Nearest Neighbor." << endl;
+    cout << "4 - T2.4 - Other Heuristic - Nearest Neighbor - Choose start node." << endl;
+    cout << "5 - Change dataset." << endl;
+    cout << "6 - Print number of vertex and number edges." << endl;
     cout << "0 - Quit." << endl;
     cout << endl;
     cout << "Note: If you enter a 'q' when asked for an input," << endl;
@@ -158,7 +171,7 @@ void mainMenu() {
             cout << endl;
             switch (op) {
                 case 1 :
-                    if(graphN > 5){
+                    if(graphN > 14){
                         cout << "Backtracking Algorithm not possible for bigger graphs." << endl;
                         menus.emplace("main");
                     } else {
@@ -172,17 +185,20 @@ void mainMenu() {
                     menus.emplace("otherTSP");
                     return;
                 case 4 :
+                    menus.emplace("realWorld");
+                    return;
+                case 5 :
                     csvInfo::edgesGraph = Graph();
                     menus.emplace("dataset");
                     return;
-                case 5 :
+                case 6 :
                     menus.emplace("test");
                     return;
                 case 0:
                     quit = true;
                     return;
                 default:
-                    cout << "Invalid number! The number should be between 0 and 5." << endl;
+                    cout << "Invalid number! The number should be between 0 and 6." << endl;
             }
         }
         else {
@@ -234,18 +250,18 @@ void datasetMenu(){
             cout << endl;
             switch (op) {
                 case 1 :
-                    csvInfo::createGraph(1);
-                    graphN = 1;
+                    csvInfo::createGraph(13);
+                    graphN = 13;
                     menus.emplace("main");
                     return;
                 case 2 :
-                    csvInfo::createGraph(2);
-                    graphN = 2;
+                    csvInfo::createGraph(10);
+                    graphN = 10;
                     menus.emplace("main");
                     return;
                 case 3 :
-                    csvInfo::createGraph(3);
-                    graphN = 3;
+                    csvInfo::createGraph(4);
+                    graphN = 4;
                     menus.emplace("main");
                     return;
                 case 4 :
@@ -354,9 +370,13 @@ void datasetMenu(){
 }
 
 
-//para testar (apagar no final)
+/**
+ * @brief Function to print the number of nodes and the number of edges
+ *
+ * Complexity: 0(n^2)
+ */
 void teste(){
-    int number = 0;
+    int n = 0;
     for (auto v : csvInfo::edgesGraph.getVertexSet()) {
         for (auto e : v->getAdj()) {
             e->setTest(false);
@@ -365,14 +385,14 @@ void teste(){
     for (auto v : csvInfo::edgesGraph.getVertexSet()) {
         for (auto e : v->getAdj()) {
             if (!e->isTest()) {
-                number++;
+                n++;
                 e->setTest(true);
             }
         }
     }
 
-    std::cout << "Number of nodes: " << csvInfo::edgesGraph.getVertexSet().size() << "\n";
-    std::cout << "Number of edges: " << number << "\n";
+    cout << "Number of nodes: " << csvInfo::edgesGraph.getVertexSet().size() << endl;
+    cout << "Number of edges: " << n << endl;
     over = true;
 }
 
@@ -380,11 +400,10 @@ void teste(){
 /**
  * @brief Backtracking Algorithm
  *
- * Complexity: O(n^3)
+ * Complexity: O(n! * n^2)
  */
 void solveTSPBacktracking() {
-    //cout << "vertexSet size: " << csvInfo::edgesGraph.getVertexSet().size() << endl;
-    auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
+    auto startTime = chrono::high_resolution_clock::now();
     string startNode = "0";
 
     for (auto a : csvInfo::edgesGraph.getVertexSet()){
@@ -406,17 +425,17 @@ void solveTSPBacktracking() {
     } cout << endl;
     cout << "Distance: " << min << endl;
 
-    auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
-    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    auto endTime = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(endTime - startTime);
+    auto minutes = chrono::duration_cast<chrono::minutes>(duration);
     duration -= minutes;
-    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    auto seconds = chrono::duration_cast<chrono::seconds>(duration);
     duration -= seconds;
-    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+    auto milliseconds = chrono::duration_cast<chrono::milliseconds>(duration);
     duration -= milliseconds;
 
     cout << endl;
-    std::cout << "Time taken by Backtracking: "
+    cout << "Time taken by Backtracking: "
             << minutes.count() << " minutes "
             << seconds.count() << " seconds "
             << milliseconds.count() << " milliseconds "
@@ -427,17 +446,17 @@ void solveTSPBacktracking() {
 }
 
 
-
+/**
+ * @brief Executes the Triangular Approximation Heuristic for the TSP problem.
+ *
+ * Complexity: 0(n^3)
+ */
 void tsp_2_approximation() {
+    auto startTime = chrono::high_resolution_clock::now();
 
-    auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
-
-    std::vector<string> tour; // Stores nodes in the order they are visited in the tour.
-    // Clear the tour vector
-
+    vector<string> tour;
 
     vector<string> prim;
-    // Create a minimum spanning tree (MST) of the graph
     AuxFunctions::primMST(prim);
 
 
@@ -447,8 +466,8 @@ void tsp_2_approximation() {
     }
 
     tour.clear();
+    tour.push_back("0");
     AuxFunctions::triangular("0", tour, prim);
-
 
     double min = AuxFunctions::calculateTourDistance(tour, csvInfo::edgesGraph, graphN);
 
@@ -462,17 +481,17 @@ void tsp_2_approximation() {
     } cout << endl;
     cout << "Distance: " << min << endl;
 
-    auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
-    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    auto endTime = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(endTime - startTime);
+    auto minutes = chrono::duration_cast<chrono::minutes>(duration);
     duration -= minutes;
-    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    auto seconds = chrono::duration_cast<chrono::seconds>(duration);
     duration -= seconds;
-    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+    auto milliseconds = chrono::duration_cast<chrono::milliseconds>(duration);
     duration -= milliseconds;
 
     cout << endl;
-    std::cout << "Time taken by Triangular Approximation Heuristic: "
+    cout << "Time taken by Triangular Approximation Heuristic: "
               << minutes.count() << " minutes "
               << seconds.count() << " seconds "
               << milliseconds.count() << " milliseconds "
@@ -494,38 +513,95 @@ void tsp_2_approximation() {
  * is complete.
  *
  * Complexity: O(n^2)
- *
  */
 void tsp_otherheuristic() {
-
-    //SETTING INITIAL CONDITIONS
-    cout << "vertexSet size: " << csvInfo::edgesGraph.getVertexSet().size() << endl;
-    auto startTime = std::chrono::high_resolution_clock::now(); // Start measuring time
+    auto startTime = chrono::high_resolution_clock::now();
     string startNode = "0";
 
     for (auto a : csvInfo::edgesGraph.getVertexSet()){
         a->setVisited(false);
     }
 
-    std::vector<string> tour; // Stores nodes in the order they are visited in the tour.
-    std::vector<string> minTour;
+    vector<string> tour;
+    vector<string> minTour;
     double min = INT_MAX;
 
 
     AuxFunctions::other_heuristic(startNode, tour, csvInfo::edgesGraph, min, 0, minTour, graphN);
 
 
-    auto endTime = std::chrono::high_resolution_clock::now(); // Stop measuring time
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
-    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    auto endTime = chrono::high_resolution_clock::now(); // Stop measuring time
+    auto duration = chrono::duration_cast<chrono::microseconds>(endTime - startTime);
+    auto minutes = chrono::duration_cast<chrono::minutes>(duration);
     duration -= minutes;
-    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    auto seconds = chrono::duration_cast<chrono::seconds>(duration);
     duration -= seconds;
-    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+    auto milliseconds = chrono::duration_cast<chrono::milliseconds>(duration);
     duration -= milliseconds;
 
     cout << endl;
-    std::cout << "Time taken by Nearest Neighbor Heuristic algorithm: "
+    cout << "Time taken by Nearest Neighbor Heuristic algorithm: "
+              << minutes.count() << " minutes "
+              << seconds.count() << " seconds "
+              << milliseconds.count() << " milliseconds "
+              << duration.count() << " microseconds" << endl;
+    cout << endl;
+    over = true;
+}
+
+
+/**
+ * @brief Executes the nearest neighbor heuristic for the TSP problem but allows user to choose start node.
+ *
+ * Complexity: O(n^2)
+ */
+void tsp_otherheuristicForRealWorld() {
+
+    int op = 0;
+
+    cout << endl << "Choose the starting node between 0 and " << graphN << endl;
+    bool flag = true;
+    while (flag) {
+        cout << "Enter the node number: ";
+        if (cin >> op) {
+            cout << endl;
+            cout << "Starting node : " << op << endl;
+            cout << "Calculating ..." << endl;
+            cout << endl;
+           flag = false;
+        }
+        else {
+            cout << "Invalid input! Please enter a valid Airport Code." << endl;
+            cin.clear();          // Clear the error state
+            cin.ignore(INT_MAX , '\n'); // Ignore the invalid input
+        }
+    }
+
+
+    auto startTime = chrono::high_resolution_clock::now();
+    string startNode = to_string(op);
+
+    for (auto a : csvInfo::edgesGraph.getVertexSet()){
+        a->setVisited(false);
+    }
+
+    vector<string> tour;
+    vector<string> minTour;
+    double min = INT_MAX;
+
+    AuxFunctions::other_heuristic(startNode, tour, csvInfo::edgesGraph, min, 0, minTour, graphN);
+
+    auto endTime = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(endTime - startTime);
+    auto minutes = chrono::duration_cast<chrono::minutes>(duration);
+    duration -= minutes;
+    auto seconds = chrono::duration_cast<chrono::seconds>(duration);
+    duration -= seconds;
+    auto milliseconds = chrono::duration_cast<chrono::milliseconds>(duration);
+    duration -= milliseconds;
+
+    cout << endl;
+    cout << "Time taken by Nearest Neighbor Heuristic for Real World Graphs algorithm: "
               << minutes.count() << " minutes "
               << seconds.count() << " seconds "
               << milliseconds.count() << " milliseconds "

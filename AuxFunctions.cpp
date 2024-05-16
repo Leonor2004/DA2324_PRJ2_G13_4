@@ -7,53 +7,23 @@
 AuxFunctions::AuxFunctions() = default;
 
 
-/**
- * @brief Calculates the great-circle distance between two points on a sphere given their longitudes and latitudes.
- * This method uses the 'Haversine' formula to calculate the distance.
- *
- * Complexity: O(1)
- *
- * @param lat1
- * @param lon1
- * @param lat2
- * @param lon2
- * @return The great-circle distance between the two points in kilometers.
- */
-double haversine(double lat1, double lon1, double lat2, double lon2) {
+double AuxFunctions::haversine(double lat1, double lon1, double lat2, double lon2) {
 
     lat1 = lat1 * M_PI / 180.00;
     lon1 = lon1 * M_PI / 180.00;
     lat2 = lat2 * M_PI / 180.0;
     lon2 = lon2 * M_PI / 180.0;
 
-
     double dlon = lon2 - lon1;
     double dlat = lat2 - lat1;
     double a = pow(sin(dlat / 2), 2) + cos(lat1) * cos(lat2) * pow(sin(dlon / 2), 2);
     double c = 2 * asin(sqrt(a));
 
-
     double r = 6371;
-
 
     return c * r;
 }
 
-bool AuxFunctions::findEdge(int node1, int node2) {
-    // Iterate over the adjacency list of node1
-    for (auto vertex : csvInfo::edgesGraph.getVertexSet()) {
-        if(vertex->getInfo() == std::to_string(node1)) {
-            for (auto edge: vertex->getAdj()) {
-                // If an edge exists between node1 and node2, return true
-                if (edge->getDest()->getInfo() == std::to_string(node2)) {
-                    return true;
-                }
-            }
-        }
-    }
-    // If no edge exists between node1 and node2, return false
-    return false;
-}
 
 double AuxFunctions::calculateTourDistance(const vector<string>& tour, const Graph& graph, int graphN) {
     double distance = 0.0;
@@ -72,7 +42,6 @@ double AuxFunctions::calculateTourDistance(const vector<string>& tour, const Gra
 
 void AuxFunctions::backtrack(string current, vector<string>& tour, Graph& graph, double& minDistance, double& tourDistance, vector<string>& minTour) {
     Vertex* currentVertex = graph.findVertex(current);
-    //cout << currentVertex->getInfo() << " ";
 
     if (tour.size() == graph.getVertexSet().size()+1 && currentVertex->getInfo() == "0") {
         if (tourDistance < minDistance) {
@@ -102,13 +71,13 @@ void AuxFunctions::backtrack(string current, vector<string>& tour, Graph& graph,
 
 void AuxFunctions::primMST(vector<string>& prim) {
     vector<Vertex*> vertices = csvInfo::edgesGraph.getVertexSet();
-    int num_vertices = vertices.size(); // Number of vertices in the graph
+    int num_vertices = vertices.size();
     if(num_vertices == 0){
         return;
     }
 
     for (auto vert : csvInfo::edgesGraph.getVertexSet()) {
-        vert->setDist(std::numeric_limits<double>::infinity());
+        vert->setDist(numeric_limits<double>::infinity());
         vert->setVisited(false);
         vert->setPath(nullptr);
     }
@@ -130,11 +99,11 @@ void AuxFunctions::primMST(vector<string>& prim) {
         for (Edge* edge : u->getAdj()) {
             Vertex* v = edge->getDest();
             double weight = edge->getWeight();
-            auto dist = v->getDist(); //antes de mudar a dist de v
+            auto dist = v->getDist();
             if (!v->isVisited() && weight < v->getDist()) {
                 v->setDist(weight);
                 v->setPath(edge);
-                if (dist == std::numeric_limits<double>::infinity()) {
+                if (dist == numeric_limits<double>::infinity()) {
                     pq.insert(v);
                 }
                 else {
@@ -146,59 +115,26 @@ void AuxFunctions::primMST(vector<string>& prim) {
 }
 
 
-void AuxFunctions::triangular(string node, vector<string>& tour, vector<string>& prim) {
-    Vertex* v = csvInfo::edgesGraph.findVertex(node);
-    v->setVisited(true);
+void AuxFunctions::triangular(string startNode, vector<string> &tour, vector<string> &prim) {
+    Vertex* startVertex = csvInfo::edgesGraph.findVertex(startNode);
+    startVertex->setVisited(true);
 
-    Vertex* previousVertex = nullptr;
-    Vertex* lastVertex = nullptr;
-    double totalDistance = 0;
-    bool conecao;
+    Vertex* previousVertex = startVertex;
 
-    for (auto nextNode : prim) {
+    for (const auto &nextNode : prim) {
         Vertex* nextVertex = csvInfo::edgesGraph.findVertex(nextNode);
-        if(previousVertex != nullptr){
-            conecao = false;
-            for (auto e : previousVertex->getAdj()) {
-                if (e->getDest() == nextVertex) {
-                    if (!nextVertex->isVisited()) {
-                        totalDistance += e->getWeight();
-                        tour.push_back(nextVertex->getInfo());
-                        nextVertex->setVisited(true);
-                        previousVertex = nextVertex;
-                    }
-                    conecao = true;
-                    break;
-                }
-            }
-            if (!conecao) {
-                nextVertex->setVisited(true);
-                totalDistance += haversine(previousVertex->getLat(), previousVertex->getLon(), nextVertex->getLat(), nextVertex->getLon());
-                tour.push_back(nextVertex->getInfo());
-                previousVertex = nextVertex;
-            }
-        } else {
-            previousVertex = nextVertex;
+        if (!nextVertex->isVisited()) {
             tour.push_back(nextVertex->getInfo());
-            lastVertex = nextVertex;
-        }
-    }
-    tour.push_back("0");
-
-    for (auto edge: previousVertex->getAdj()) {
-        if (edge->getDest() == lastVertex) {
-            totalDistance += edge->getWeight();
+            nextVertex->setVisited(true);
+            previousVertex = nextVertex;
         }
     }
 
-    if (previousVertex != nullptr) {
-        totalDistance += haversine(csvInfo::edgesGraph.findVertex("0")->getLat(), csvInfo::edgesGraph.findVertex("0")->getLon(), lastVertex->getLat(), lastVertex->getLon());
-    }
-
+    tour.push_back(startNode);
 }
 
 
-std::string AuxFunctions::find_any_unvisited(const Graph &graph) {
+string AuxFunctions::find_any_unvisited(const Graph &graph) {
     for (const auto &vertex : graph.getVertexSet()) {
         if (!vertex->isVisited()) {
             return vertex->getInfo();
@@ -211,25 +147,23 @@ std::string AuxFunctions::find_any_unvisited(const Graph &graph) {
 void AuxFunctions::other_heuristic(string current, vector<string> &tour, Graph &graph, double &minDistance, int tourDistance,
                                    vector<string> &minTour, int graphN){
 
-    //Vertex* currentVertex = graph.findVertex(current);
-    //graph.findVertex(current)->setVisited(true);
     minTour.push_back(current);
 
     while(minTour.size() < graph.getVertexSet().size()){
         Vertex* currentVertex = graph.findVertex(current);
         if (currentVertex == nullptr) {
-            std::cerr << "Error: Vertex " << current << " not found in the graph." << std::endl;
+            cerr << "Error: Vertex " << current << " not found in the graph." << endl;
             return;
         }
 
         graph.findVertex(current)->setVisited(true);
 
-        std::string nextVertex = nearest_neighbor(current, graph);
+        string nextVertex = nearest_neighbor(current, graph);
 
         if (nextVertex == "-1") {
             nextVertex = find_any_unvisited(graph);
-            if (nextVertex == "-1" || (graphN >24 && stoi(nextVertex) >= graphN)) {
-                cout << "Error: No unvisited neighbors found. Exiting." << std::endl;
+            if (nextVertex == "-1" || (graphN > 24 && stoi(nextVertex) >= graphN)) {
+                //cout << "Error: No unvisited neighbors found. Exiting." << endl;
                 break;
             }
         }
@@ -259,17 +193,17 @@ void AuxFunctions::other_heuristic(string current, vector<string> &tour, Graph &
 
 string AuxFunctions::nearest_neighbor(string current, Graph &graph){
     string nearest = "-1";
-    double min_distance=std::numeric_limits<double>::infinity();
+    double min_distance=numeric_limits<double>::infinity();
 
     Vertex* currentVertex = graph.findVertex(current);
 
     if (currentVertex == nullptr) {
-        std::cerr << "Error: Vertex " << current << " not found in the graph." << std::endl;
+        cerr << "Error: Vertex " << current << " not found in the graph." << endl;
         return nearest;
     } else {
         for (auto edge : currentVertex->getAdj()){
             if (edge->getDest() == nullptr) {
-                std::cerr << "Error: Destination vertex in edge is null." << std::endl;
+                cerr << "Error: Destination vertex in edge is null." << endl;
                 continue;
 
             }

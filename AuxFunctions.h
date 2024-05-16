@@ -18,34 +18,35 @@ public:
     AuxFunctions();
 
     /**
-     * @brief Find an edge in the edges graph
+     * @brief Calculates the great-circle distance between two points on a sphere given their longitudes and latitudes.
+     * This method uses the 'Haversine' formula to calculate the distance.
      *
-     * Complexity: O(n^2)
+     * Complexity: O(1)
      *
-     * @param node1 : Starting node
-     * @param node2 : Ending node
-     * @return True of the edge exists and false if it doesn't
+     * @param lat1 : Latitude of node 1
+     * @param lon1 : Longitude of node 1
+     * @param lat2 : Latitude of node 2
+     * @param lon2 : Longitude of node 2
+     * @return The great-circle distance between the two points in kilometers.
      */
-    static bool findEdge(int node1, int node2);
-
+    static double haversine(double lat1, double lon1, double lat2, double lon2);
 
     /**
      * @brief Calculate tour distance
      *
-     * Complexity: O(n^2)
+     * Complexity: O(n^3)
      *
      * @param tour : Tour
      * @param graph : Graph
-     * @param ???
+     * @param graphN : Graph number
      * @return Tour distance
      */
     static double calculateTourDistance(const vector<string> &tour, const Graph &graph, int graphN);
 
-    //topico 1
     /**
      * @brief Backtrack Algorithm
      *
-     * Complexity: O(n^3)
+     * Complexity: O(n! * n^2)
      *
      * @param current : Current node
      * @param tour : Tour
@@ -53,16 +54,14 @@ public:
      * @param minDistance : Minimum Distance
      * @param minTour : Minimum Distance Tours
      */
-    static void backtrack(string current, vector<string> &tour, Graph &graph, double &minDistance, double &tourDistance,
-                          vector<string> &minTour);
+    static void backtrack(string current, vector<string> &tour, Graph &graph, double &minDistance, double &tourDistance, vector<string> &minTour);
 
-    //topico 2
     /**
      * @brief This method creates a minimum spanning tree (MST) of the graph.
      *
-     * Complexity: O(n^2)
+     * Complexity: O(n*log(n))
      *
-     * COMPLETAR ???
+     * @param prim : Vector of strings to save the solution
      */
     static void primMST(vector<string> &prim);
 
@@ -71,11 +70,21 @@ public:
      *
      * Complexity: O(n)
      *
-     * @param node The node to start the DFS from.
+     * @param node The node to start the DFS from
+     * @param tour : Tour
+     * @param prim : Vector of strings with the Prim solution
      */
     static void triangular(string node, vector<string> &tour, vector<string> &prim);
 
-
+    /**
+     * @brief Find any unvisited Vertex
+     *
+     * Complexity: O(n)
+     *
+     * @param graph : Edges graph
+     * @return Vertex id
+     */
+    static string find_any_unvisited(const Graph &graph);
 
     /**
      * @brief Executes an alternative heuristic for the TSP problem using the nearest neighbor approach.
@@ -84,19 +93,16 @@ public:
      * Travelling Salesman Problem (TSP). Starting from a given node, it iteratively selects the nearest
      * unvisited node as the next node to visit until all nodes have been visited.
      *
+     * Complexity: O(n^2)
+     *
      * @param current The starting node for the TSP.
      * @param tour A vector to store the nodes in the order they are visited.
      * @param graph The graph representing the TSP.
      * @param minDistance The minimum distance of the tour found so far.
      * @param tourDistance The total distance of the current tour.
      * @param minTour A vector to store the nodes of the minimum tour found so far.
-     *
-     * Complexity: O(n^2)
      */
-    static void other_heuristic(string current, vector<string> &tour, Graph &graph, double &minDistance, int tourDistance,
-                                vector<string> &minTour, int graphN);
-
-
+    static void other_heuristic(string current, vector<string> &tour, Graph &graph, double &minDistance, int tourDistance, vector<string> &minTour, int graphN);
 
     /**
      * @brief Finds the nearest unvisited neighbor to a given node.
@@ -104,15 +110,13 @@ public:
      * This function finds the nearest unvisited neighbor to a given node in the graph.
      * The "nearest" neighbor is determined based on the weight of the edge connecting the nodes.
      *
+     * Complexity: O(n)
+     *
      * @param current The node for which to find the nearest neighbor.
      * @param graph The graph in which to find the neighbor.
-     *
      * @return The information of the nearest unvisited neighbor. If no unvisited neighbor exists, returns "-1".
-     *
-     * Complexity: O(n)
      */
     static string nearest_neighbor(string current, Graph &graph);
 
-    static string find_any_unvisited(const Graph &graph);
 };
 #endif //DA2324_PRJ2_G13_4_AUXFUNCTIONS_H

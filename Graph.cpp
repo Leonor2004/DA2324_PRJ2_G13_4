@@ -13,7 +13,7 @@ string Vertex::getInfo() const {
 }
 
 
-std::vector<Edge*> Vertex::getAdj() const {
+vector<Edge*> Vertex::getAdj() const {
     return this->adj;
 }
 
@@ -29,7 +29,7 @@ Edge *Vertex::getPath() const {
     return this->path;
 }
 
-std::vector<Edge *> Vertex::getIncoming() const {
+vector<Edge *> Vertex::getIncoming() const {
     return this->incoming;
 }
 
@@ -157,10 +157,9 @@ void Edge::setTest(bool test){
 
 /********************** Graph  ****************************/
 
-std::vector<Vertex*> Graph::getVertexSet() const {
+vector<Vertex*> Graph::getVertexSet() const {
     return vertexSet;
 }
-
 
 Vertex* Graph::findVertex(const string &in) const {
     for (auto v : vertexSet)
