@@ -61,7 +61,7 @@ void clearMenus() {
 /**
  * @brief Main function to initialize data and run the program.
  *
- * Complexity: O(???)
+ * Complexity: O(n! * n^2)
  *
  * @return Program exit status.
  */
@@ -141,7 +141,7 @@ int main(){
 /**
  * @brief Main Menu
  *
- * Complexity: O(???)
+ * Complexity: O(n)
  */
 void mainMenu() {
 
@@ -213,7 +213,7 @@ void mainMenu() {
 /**
  * @brief Dataset Menu
  *
- * Complexity: ???
+ * Complexity: O(n^2)
  */
 void datasetMenu(){
     int op = 0;
