@@ -14,10 +14,44 @@
 class csvInfo {
 private:
 public:
+
     /**
      * @brief Default constructor
      */
     csvInfo();
+
+    /**
+     * @brief Graph
+     */
+    static Graph edgesGraph;
+
+    /**
+     * @brief Vertex Vector
+     */
+    static vector<Vertex> vertexVector;
+
+    /**
+     * Vertex Set
+     */
+    static set<string> vertexSet;
+
+    /**
+     * @brief Creation of the graph
+     *
+     * Complexity: O(n^2)
+     *
+     * @param graph : Graph the user chose
+     */
+    static void createGraph(int graph);
+
+    /**
+     * @brief Longitude and latitude of Extra Fully Connected Graphs and Real World Graph
+     *
+     * Complexity: O(n^2)
+     *
+     * @param graph : Number of edges
+     */
+    static void createNodes(int graph);
 
 };
 

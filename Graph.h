@@ -6,13 +6,14 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
+#include "MutablePriorityQueue.h"
 
 using namespace std;
 
 
 class Edge;
 
-#define INF std::numeric_limits<double>::max()
+#define INF numeric_limits<double>::max()
 
 /**
  * @brief Represents a Vertex in the graph.
@@ -26,10 +27,21 @@ public:
      * Complexity: O(1)
      *
      * @param in : Information associated with the vertex
-     * @param type : 0,1 or 2 if City, Reservoir or Station
-     * @param pos : Position in the vector of its type (citiesVector, reservoirVector, stationsVector)
+     * @param pos : Position in the vector
+     * @param lon : Longitude
+     * @param lat : Latitude
      */
-    Vertex(string in, int type, int pos);
+    Vertex(string in, int pos, double lon, double lat);
+
+    /**
+     * @brief < operator to compare distance
+     *
+     * Complexity:
+     *
+     * @param vertex : Vertex
+     * @return True or false
+     */
+    bool operator<(Vertex & vertex) const;
 
     /**
      * @brief Get info
@@ -41,22 +53,22 @@ public:
     string getInfo() const;
 
     /**
-     * @brief Get type
-     *
-     * Complexity: O(1)
-     *
-     * @return Type
-     */
-    //int getType() const;
-
-    /**
      * @brief Get vector with adjacent edges
      *
      * Complexity: O(1)
      *
      * @return Adjacent edges
      */
-    std::vector<Edge *> getAdj() const;
+    vector<Edge *> getAdj() const;
+
+    /**
+     * @brief Get distancia
+     *
+     * Complexity: O(1)
+     *
+     * @return dist
+     */
+    double getDist() const;
 
     /**
      * @brief Check if is visited
@@ -83,16 +95,16 @@ public:
      *
      * @return Incoming edges
      */
-    std::vector<Edge *> getIncoming() const;
+    vector<Edge *> getIncoming() const;
 
     /**
-     * @brief Get the value of the position in the vector of its type
+     * @brief Set distancia
      *
-     * Complexity:  O(1)
+     * Complexity: O(1)
      *
-     * @return Position
+     * @param dist : Distance
      */
-    int getPos();
+    void setDist(double dist);
 
     /**
      * @brief Set visited
@@ -140,16 +152,40 @@ public:
      */
     void removeOutgoingEdges();
 
+    /**
+     * @brief Get longitude
+     *
+     * Complexity: O(1)
+     *
+     * @return Longitude
+     */
+    double getLon() const;
+
+    /**
+     * @brief Get latitude
+     *
+     * Complexity: O(1)
+     *
+     * @return Latitude
+     */
+    double getLat() const;
+
+    friend class MutablePriorityQueue<Vertex>;
+
 protected:
     string info;                    // info node
-    //int type;                       // 0->City; 1->Reservoir; 2->Station
-    std::vector<Edge *> adj;        // outgoing edges
-    std::vector<Edge *> incoming;   // incoming edges
-    int vectorPos;                  // position in the vector of its type (citiesVector, reservoirVector, stationsVector)
+    double longitude;
+    double latitude;
+    vector<Edge *> adj;        // outgoing edges
+    vector<Edge *> incoming;   // incoming edges
+    int vectorPos;                  // position in the vector
 
     // auxiliary fields
+    double dist = 0;
     bool visited = false;
     Edge *path = nullptr;
+
+    int queueIndex = 0; //MutablePriorityQueue
 
     /**
      * @brief Constructor for Vertex class
@@ -259,10 +295,27 @@ public:
      */
     //void setFlow(double flow);
 
+    /**
+     * @brief Check if is visited
+     *
+     * Complexity: O(1)
+     *
+     * @return True or false
+     */
+    bool isTest() const;
+    /**
+     * @brief Set visited
+     *
+     * Complexity: O(1)
+     *
+     * @param visited : True or false
+     */
+    void setTest(bool test);
 
 protected:
     Vertex * dest; // destination vertex
     double weight; // edge weight
+    bool teste = false;
     //double capacity; // edge capacity, don't change
 
     // used for bidirectional edges
@@ -295,9 +348,14 @@ public:
      *
      *  Complexity: O(n)
      *
-     *  @return Returns true if successful, and false if a vertex with that content already exists.
+     * @param in : Info
+     * @param pos : Position
+     * @param lon : Longitude
+     * @param lat : Latitude
+     *
+     * @return Returns true if successful, and false if a vertex with that content already exists.
      */
-    bool addVertex(const string &in, int t, int pos);
+    bool addVertex(const string &in, int pos, double lon, double lat);
 
     /**
      * @brief Remove vertex
@@ -319,6 +377,18 @@ public:
      */
     bool addEdge(const string &sourc, const string &dest, double w);
 
+
+    /**
+     * @brief Get edge between source and destination
+     *
+     * Complexity: 0(n^2)
+     *
+     * @param source : Source
+     * @param destination : Destination
+     * @return Edge
+     */
+    Edge* getEdge(const string& source, const string& destination) const;
+
     /**
      * @brief Add bidirectional edge
      *
@@ -338,10 +408,10 @@ public:
      *
      * @return vertexSet
      */
-    std::vector<Vertex *> getVertexSet() const;
+    vector<Vertex *> getVertexSet() const;
 
 protected:
-    std::vector<Vertex *> vertexSet;
+    vector<Vertex *> vertexSet;
     double ** distMatrix = nullptr;
     int **pathMatrix = nullptr;
 };

@@ -2,18 +2,23 @@
 
 /************************* Vertex  **************************/
 
-Vertex::Vertex(string in, int t, int pos): info(in)/*, type(t)*/, vectorPos(pos) {}
+Vertex::Vertex(string in, int pos, double lon, double lat): info(in), vectorPos(pos), longitude(lon), latitude(lat) {}
+
+bool Vertex::operator<(Vertex & vertex) const {
+    return this->dist < vertex.dist;
+}
 
 string Vertex::getInfo() const {
     return this->info;
 }
 
-/*int Vertex::getType() const {
-    return type;
-}*/
 
-std::vector<Edge*> Vertex::getAdj() const {
+vector<Edge*> Vertex::getAdj() const {
     return this->adj;
+}
+
+double Vertex::getDist() const {
+    return this->dist;
 }
 
 bool Vertex::isVisited() const {
@@ -24,12 +29,16 @@ Edge *Vertex::getPath() const {
     return this->path;
 }
 
-std::vector<Edge *> Vertex::getIncoming() const {
+vector<Edge *> Vertex::getIncoming() const {
     return this->incoming;
 }
 
-int Vertex::getPos() {
+/*int Vertex::getPos() {
     return this->vectorPos;
+}*/
+
+void Vertex::setDist(double dist) {
+    this->dist = dist;
 }
 
 void Vertex::setVisited(bool visited) {
@@ -73,6 +82,15 @@ void Vertex::removeOutgoingEdges() {
         deleteEdge(edge);
     }
 }
+
+double Vertex::getLon() const {
+    return longitude;
+}
+
+double Vertex::getLat() const {
+    return latitude;
+}
+
 
 void Vertex::deleteEdge(Edge *edge) {
     Vertex *dest = edge->getDest();
@@ -129,12 +147,19 @@ void Edge::setReverse(Edge* reverse) {
     this->flow = flow;
 }*/
 
-/********************** Graph  ****************************/
-
-std::vector<Vertex*> Graph::getVertexSet() const {
-    return vertexSet;
+bool Edge::isTest() const{
+    return this->teste;
 }
 
+void Edge::setTest(bool test){
+    this->teste = test;
+}
+
+/********************** Graph  ****************************/
+
+vector<Vertex*> Graph::getVertexSet() const {
+    return vertexSet;
+}
 
 Vertex* Graph::findVertex(const string &in) const {
     for (auto v : vertexSet)
@@ -143,10 +168,10 @@ Vertex* Graph::findVertex(const string &in) const {
     return nullptr;
 }
 
-bool Graph::addVertex(const string &in, int t, int pos) {
+bool Graph::addVertex(const string &in, int pos, double lon, double lat) {
     if (findVertex(in) != nullptr)
         return false;
-    vertexSet.push_back(new Vertex(in, t, pos));
+    vertexSet.push_back(new Vertex(in, pos, lon, lat));
     return true;
 }
 
@@ -178,6 +203,25 @@ bool Graph::addEdge(const string &sourc, const string &dest, double w) {
         return false;
     v1->addEdge(v2, w);
     return true;
+}
+
+Edge* Graph::getEdge(const string& source, const string& destination) const {
+    // Iterate through each vertex in the graph
+    for (Vertex* vertex : vertexSet) {
+        // Iterate through the outgoing edges of the vertex
+        for (Edge* edge : vertex->getAdj()) {
+            // Check if the edge's origin vertex info matches the source vertex
+            if (edge->getOrig()->getInfo() == source) {
+                // Check if the edge's destination vertex info matches the destination vertex
+                if (edge->getDest()->getInfo() == destination) {
+                    // Return the edge if found
+                    return edge;
+                }
+            }
+        }
+    }
+    // Return nullptr if no matching edge is found
+    return nullptr;
 }
 
 bool Graph::addBidirectionalEdge(const string &sourc, const string &dest, double w) {
