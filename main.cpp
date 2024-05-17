@@ -435,8 +435,8 @@ void solveTSPBacktracking() {
     duration -= milliseconds;
 
     cout << endl;
-    cout << "Time taken by Backtracking: "
-            << minutes.count() << " minutes "
+    cout << "Time taken by Backtracking: " << endl;
+    cout << minutes.count() << " minutes "
             << seconds.count() << " seconds "
             << milliseconds.count() << " milliseconds "
             << duration.count() << " microseconds" << endl;
@@ -491,8 +491,8 @@ void tsp_2_approximation() {
     duration -= milliseconds;
 
     cout << endl;
-    cout << "Time taken by Triangular Approximation Heuristic: "
-              << minutes.count() << " minutes "
+    cout << "Time taken by Triangular Approximation Heuristic: " << endl;
+    cout <<  minutes.count() << " minutes "
               << seconds.count() << " seconds "
               << milliseconds.count() << " milliseconds "
               << duration.count() << " microseconds" << endl;
@@ -540,8 +540,8 @@ void tsp_otherheuristic() {
     duration -= milliseconds;
 
     cout << endl;
-    cout << "Time taken by Nearest Neighbor Heuristic algorithm: "
-              << minutes.count() << " minutes "
+    cout << "Time taken by Nearest Neighbor Heuristic algorithm: " << endl;
+    cout << minutes.count() << " minutes "
               << seconds.count() << " seconds "
               << milliseconds.count() << " milliseconds "
               << duration.count() << " microseconds" << endl;
@@ -601,8 +601,8 @@ void tsp_otherheuristicForRealWorld() {
     duration -= milliseconds;
 
     cout << endl;
-    cout << "Time taken by Nearest Neighbor Heuristic for Real World Graphs algorithm: "
-              << minutes.count() << " minutes "
+    cout << "Time taken by Nearest Neighbor Heuristic for Real World Graphs algorithm: " << endl;
+    cout << minutes.count() << " minutes "
               << seconds.count() << " seconds "
               << milliseconds.count() << " milliseconds "
               << duration.count() << " microseconds" << endl;
