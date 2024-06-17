@@ -22,4 +22,4 @@ However their application to large graphs is infeasible, due to their high compu
 - **Group members:**
   - Frederica Pereira (up202108167@up.pt),
   - Leonor Couto (up202205796@up.pt),
-  - Tomás Rodrigues (up202205749@up.pt)
+  - Tomás Rodrigues (up202205749@up.pt).
